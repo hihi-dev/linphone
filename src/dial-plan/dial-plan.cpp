@@ -46,6 +46,8 @@ const list<DialPlan> DialPlanPrivate::DialPlans = {
 	{ "Anguilla", "AI", "1", 10, "011" },
 	{ "Antigua and Barbuda", "AG", "1", 10, "011" },
 	{ "Argentina", "AR", "54", 10, "00" },
+	/*The following is a pseudo dial plan for Argentinian mobile phones. See https://en.wikipedia.org/wiki/Telephone_numbers_in_Argentina */
+	{ "Argentina", "AR", "549", 10, "00" },
 	{ "Armenia", "AM", "374", 8, "00" },
 	{ "Aruba", "AW", "297", 7, "011" },
 	{ "Australia", "AU", "61", 9, "0011" },
