@@ -402,7 +402,7 @@ void CallSessionPrivate::terminated () {
 		case CallSession::State::IncomingReceived:
 		case CallSession::State::IncomingEarlyMedia:
 			if (!op->getReasonErrorInfo()->protocol || strcmp(op->getReasonErrorInfo()->protocol, "") == 0) {
-				linphone_error_info_set(ei, nullptr, LinphoneReasonNotAnswered, 0, "Incoming call cancelled", nullptr);
+				linphone_error_info_set(ei, nullptr, LinphoneReasonNotAnswered, 0, "Incoming call cancelled", op->getReasonErrorInfo()->status_string);
 				nonOpError = true;
 			}
 			break;
