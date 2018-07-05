@@ -129,6 +129,10 @@ public:
 	int ping (const std::string &from, const std::string &to);
 	int sendInfo (const SalBodyHandler *bodyHandler);
 
+    /* 4Com - 4Sight */
+	bool getcallInviteHadEmptyBody() { return mcallInviteHadEmptyBody; }
+	/* 4Com END */
+
 protected:
 	enum class State {
 		Early = 0,
@@ -210,6 +214,10 @@ protected:
 	static void assignAddress (SalAddress **address, const std::string &value);
 	static void addInitialRouteSet (belle_sip_request_t *request, const std::list<SalAddress *> &routeAddresses);
 
+    /* 4Com - 4Sight */
+	void setcallInviteHadEmptyBody(const bool callInviteHadEmptyBody) { mcallInviteHadEmptyBody = callInviteHadEmptyBody; }
+    /* 4Com - END */
+
 	// SalOpBase
 	Sal *mRoot = nullptr;
 	std::string mRoute; // Or request-uri for REGISTER
@@ -265,6 +273,7 @@ protected:
 	bool mHasAuthPending = false;
 	bool mSupportsSessionTimers = false;
 	bool mOpReleased = false;
+	bool mcallInviteHadEmptyBody = false; /* 4Com - 4Sight */
 
 	friend class Sal;
 };

@@ -723,6 +723,13 @@ void SalCallOp::processRequestEventCb(void *op_base, const belle_sip_request_eve
 						ms_message("The caller asked to automatically answer the call(Emergency?)\n");
 					}
 				}
+
+                /* 4Com - Check if INVITE body is empty. (Auto-answer from 4Sight) */
+                if (belle_sip_message_get_body_size(BELLE_SIP_MESSAGE(req)) == 0) {
+                    op->setcallInviteHadEmptyBody(TRUE);
+                }
+                /* 4Com END */
+
 				op->mRoot->mCallbacks.call_received(op);
 			}else{
 				sal_error_info_set(&op->mErrorInfo, reason, "SIP", 0, NULL, NULL);

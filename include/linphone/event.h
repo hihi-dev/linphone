@@ -257,6 +257,19 @@ LINPHONE_PUBLIC void linphone_event_cbs_set_notify_response(LinphoneEventCbs *cb
  * @}
 **/
 
+/* 4com */
+/** Enum for subscription states */
+enum _LinphoneCtiEvent {
+    CtiAnswer,
+    CtiHold,
+    CtiResume
+};
+
+/** Typedef for subscription state enum */
+typedef enum _LinphoneCtiEvent LinphoneCtiEvent;
+
+/* 4Com END */
+
 #ifdef __cplusplus
 }
 #endif
