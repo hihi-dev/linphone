@@ -130,7 +130,7 @@ public:
 	int sendInfo (const SalBodyHandler *bodyHandler);
 
     /* 4Com - 4Sight */
-	bool getcallInviteHadEmptyBody() { return mcallInviteHadEmptyBody; }
+	bool getcallInviteHadEmptyBody() { return mCallInviteHadEmptyBody; }
 	/* 4Com END */
 
 protected:
@@ -215,7 +215,7 @@ protected:
 	static void addInitialRouteSet (belle_sip_request_t *request, const std::list<SalAddress *> &routeAddresses);
 
     /* 4Com - 4Sight */
-	void setcallInviteHadEmptyBody(const bool callInviteHadEmptyBody) { mcallInviteHadEmptyBody = callInviteHadEmptyBody; }
+	void setcallInviteHadEmptyBody(const bool callInviteHadEmptyBody) { mCallInviteHadEmptyBody = callInviteHadEmptyBody; }
     /* 4Com - END */
 
 	// SalOpBase
@@ -273,7 +273,7 @@ protected:
 	bool mHasAuthPending = false;
 	bool mSupportsSessionTimers = false;
 	bool mOpReleased = false;
-	bool mcallInviteHadEmptyBody = false; /* 4Com - 4Sight */
+	bool mCallInviteHadEmptyBody = false; /* 4Com - 4Sight */
 
 	friend class Sal;
 };

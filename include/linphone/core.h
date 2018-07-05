@@ -154,19 +154,21 @@ LINPHONE_PUBLIC const LinphoneAddress * linphone_core_get_current_call_remote_ad
 typedef void (*LinphoneCoreCbFunc)(LinphoneCore *lc,void * user_data);
 
 /* 4com */
+
 /**
  * Callback prototype for receiving 4sight CTI hold messages
  * @param lc the LinphoneCore
  * @param call the call whose info message belongs to.
- */
+**/
 typedef void (*LinphoneCoreCtiHoldReceivedCb)(LinphoneCore *lc, LinphoneCall *call);
 
 /**
  * Callback prototype for receiving 4sight CTI answer messages
  * @param lc the LinphoneCore
  * @param call the call whose info message belongs to.
- */
+**/
 typedef void (*LinphoneCoreCtiEventReceivedCb)(LinphoneCore *lc, LinphoneCall *call, LinphoneCtiEvent event);
+
 /* END 4com */
 
 /**
