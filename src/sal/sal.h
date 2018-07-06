@@ -75,6 +75,7 @@ public:
 	using OnPublishResponseCb = void (*) (SalOp *op);
 	using OnNotifyResponseCb = void (*) (SalOp *op);
 	using OnExpireCb = void (*) (SalOp *op);
+	using OnCtiEventReceivedCb = void (*) (SalOp *op, const char *event); /* 4Com - 4Sight */
 
 	struct Callbacks {
 		OnCallReceivedCb call_received;
@@ -114,6 +115,7 @@ public:
 		OnExpireCb on_expire;
 		OnNotifyResponseCb on_notify_response;
 		OnReferCb refer_received; // For out of dialog refer
+		OnCtiEventReceivedCb cti_event_received; /* 4Com - 4Sight */
 	};
 
 	Sal(MSFactory *factory);

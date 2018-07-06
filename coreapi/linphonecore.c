@@ -446,6 +446,16 @@ LinphoneCoreCbsCallCreatedCb linphone_core_cbs_get_call_created(LinphoneCoreCbs 
 	return cbs->vtable->call_created;
 }
 
+/* 4Com Start - 4Sight */
+void linphone_core_cbs_set_cti_event_received(LinphoneCoreCbs *cbs, LinphoneCoreCbsCtiEventReceivedCb cb) {
+    cbs->vtable->cti_event_received = cb;
+}
+
+LinphoneCoreCbsCtiEventReceivedCb linphone_core_cbs_get_cti_event_received(LinphoneCoreCbs *cbs) {
+    return cbs->vtable->cti_event_received;
+}
+/* 4Com END */
+
 void linphone_core_cbs_set_call_created(LinphoneCoreCbs *cbs, LinphoneCoreCbsCallCreatedCb cb) {
 	cbs->vtable->call_created = cb;
 }

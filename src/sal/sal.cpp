@@ -453,6 +453,8 @@ void Sal::setCallbacks(const Callbacks *cbs) {
 		mCallbacks.on_publish_response=(OnPublishResponseCb)unimplementedStub;
 	if (mCallbacks.on_expire==NULL)
 		mCallbacks.on_expire=(OnExpireCb)unimplementedStub;
+	if (mCallbacks.cti_event_received==NULL)
+	    mCallbacks.cti_event_received=(OnCtiEventReceivedCb)unimplementedStub;
 }
 
 void Sal::setTlsProperties(){

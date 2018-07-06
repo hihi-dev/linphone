@@ -754,6 +754,23 @@ static void on_notify_response(SalOp *op){
 	}
 }
 
+/* 4Com Start */
+
+static void cti_event_received(SalOp *op, const char* event) {
+    LinphoneCore *lc=(LinphoneCore *)op->getSal()->getUserPointer();
+    LinphoneCall *call=(LinphoneCall*)op->getUserPointer();
+
+    if(strcmp(event,"answer")==0) {
+        linphone_core_notify_cti_event_received(lc,call,CtiAnswer);
+    } else if(strcmp(event,"hold")==0) {
+        linphone_core_notify_cti_event_received(lc,call,CtiHold);
+    } else if(strcmp(event,"talk")==0) {
+        linphone_core_notify_cti_event_received(lc,call,CtiResume);
+    }
+}
+
+/* 4com end */
+
 static void refer_received(SalOp *op, const SalAddress *refer_to){
 	if (sal_address_has_param(refer_to, "text")) {
 		char *refer_uri = sal_address_as_string(refer_to);
@@ -885,4 +902,5 @@ Sal::Callbacks linphone_sal_callbacks={
 	on_expire,
 	on_notify_response,
 	refer_received,
+	cti_event_received
 };

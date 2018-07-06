@@ -153,24 +153,6 @@ LINPHONE_PUBLIC const LinphoneAddress * linphone_core_get_current_call_remote_ad
  */
 typedef void (*LinphoneCoreCbFunc)(LinphoneCore *lc,void * user_data);
 
-/* 4com */
-
-/**
- * Callback prototype for receiving 4sight CTI hold messages
- * @param lc the LinphoneCore
- * @param call the call whose info message belongs to.
-**/
-typedef void (*LinphoneCoreCtiHoldReceivedCb)(LinphoneCore *lc, LinphoneCall *call);
-
-/**
- * Callback prototype for receiving 4sight CTI answer messages
- * @param lc the LinphoneCore
- * @param call the call whose info message belongs to.
-**/
-typedef void (*LinphoneCoreCtiEventReceivedCb)(LinphoneCore *lc, LinphoneCall *call, LinphoneCtiEvent event);
-
-/* END 4com */
-
 /**
  * This structure holds all callbacks that the application should implement.
  * None is mandatory.
@@ -216,6 +198,7 @@ typedef struct _LinphoneCoreVTable{
 	LinphoneCoreFriendListCreatedCb friend_list_created;
 	LinphoneCoreFriendListRemovedCb friend_list_removed;
 	LinphoneCoreCbsCallCreatedCb call_created;
+	LinphoneCoreCbsCtiEventReceivedCb cti_event_received; /*4Com*/
 	LinphoneCoreCbsVersionUpdateCheckResultReceivedCb version_update_check_result_received;
 	LinphoneCoreCbsChatRoomStateChangedCb chat_room_state_changed;
 	LinphoneCoreCbsQrcodeFoundCb qrcode_found;
@@ -690,6 +673,22 @@ LINPHONE_PUBLIC LinphoneCoreCbsFriendListRemovedCb linphone_core_cbs_get_friend_
  * @param[in] cb The call created callback to be used.
  */
 LINPHONE_PUBLIC void linphone_core_cbs_set_call_created(LinphoneCoreCbs *cbs, LinphoneCoreCbsCallCreatedCb cb);
+
+/* 4Com - 4Sight */
+/**
+ * Get the #LinphoneCoreCbsFriendListRemovedCb callback.
+ * @param[in] cbs A #LinphoneCoreCbs.
+ * @return The callback.
+ */
+LINPHONE_PUBLIC LinphoneCoreCbsCtiEventReceivedCb linphone_core_cbs_get_cti_event_received(LinphoneCoreCbs *cbs);
+
+/**
+ * Set the call created callback.
+ * @param[in] cbs #LinphoneCallCbs object.
+ * @param[in] cb The call created callback to be used.
+ */
+LINPHONE_PUBLIC void linphone_core_cbs_set_cti_event_received(LinphoneCoreCbs *cbs, LinphoneCoreCbsCtiEventReceivedCb cb);
+/*4Com END */
 
 /**
  * Get the call created callback.
