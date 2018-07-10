@@ -721,6 +721,17 @@ int Call::getDuration () const {
 	return d->getActiveSession()->getDuration();
 }
 
+/* 4Com - 4Sight */
+/**
+ * Returns true if the INVITE that initiated the call had an empty body. This is a disgusting hack, but is the only
+ * known way to identify an auto-answer call from 4Sight.
+*/
+bool Call::callInviteHadEmptyBody() const {
+    L_D();
+    return d->getActiveSession()->getPrivate()->getOp()->getcallInviteHadEmptyBody();
+}
+/* 4Com END */
+
 const LinphoneErrorInfo *Call::getErrorInfo () const {
 	L_D();
 	return d->getActiveSession()->getErrorInfo();

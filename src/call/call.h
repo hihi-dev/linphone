@@ -127,6 +127,8 @@ public:
 	void setParams (const MediaSessionParams *msp);
 	void setSpeakerVolumeGain (float value);
 
+	bool callInviteHadEmptyBody () const; /* 4Com - 4Sight */
+
 protected:
 	Call (CallPrivate &p, std::shared_ptr<Core> core);
 

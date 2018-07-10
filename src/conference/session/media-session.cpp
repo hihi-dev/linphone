@@ -884,8 +884,17 @@ void MediaSessionPrivate::initializeParamsAccordingToIncomingCallParams () {
 	L_Q();
 	CallSessionPrivate::initializeParamsAccordingToIncomingCallParams();
 	getCurrentParams()->getPrivate()->setUpdateCallWhenIceCompleted(getParams()->getPrivate()->getUpdateCallWhenIceCompleted());
-	getParams()->enableVideo(linphone_core_video_enabled(q->getCore()->getCCore()) && q->getCore()->getCCore()->video_policy.automatically_accept);
 	SalMediaDescription *md = op->getRemoteMediaDescription();
+
+    LinphoneCore* lc = q->getCore()->getCCore();
+    bool_t enableVideo = linphone_core_video_enabled(lc) && lc->video_policy.automatically_accept;
+
+    /* 4Com AN-4097 - Don't auto enable video for 4Sight initiated call */
+    enableVideo = enableVideo && md;
+    /* 4Com END */
+
+	getParams()->enableVideo(enableVideo);
+
 	if (md) {
 		/* It is licit to receive an INVITE without SDP, in this case WE choose the media parameters according to policy */
 		setCompatibleIncomingCallParams(md);

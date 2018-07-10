@@ -573,6 +573,14 @@ bool_t linphone_call_media_in_progress (const LinphoneCall *call) {
 	return L_GET_CPP_PTR_FROM_C_OBJECT(call)->mediaInProgress();
 }
 
+/* 4Com */
+
+/* 4Sight */
+bool_t linphone_call_invite_had_empty_body(const LinphoneCall *call) {
+    return L_GET_CPP_PTR_FROM_C_OBJECT(call)->callInviteHadEmptyBody();
+}
+/* 4Com END */
+
 void linphone_call_ogl_render (const LinphoneCall *call) {
 	L_GET_CPP_PTR_FROM_C_OBJECT(call)->oglRender();
 }

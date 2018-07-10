@@ -243,6 +243,13 @@ void linphone_core_notify_configuring_status(LinphoneCore *lc, LinphoneConfiguri
 	cleanup_dead_vtable_refs(lc);
 }
 
+/* 4Com Start */
+void linphone_core_notify_cti_event_received(LinphoneCore *lc, LinphoneCall *call, LinphoneCtiEvent event) {
+  NOTIFY_IF_EXIST(cti_event_received,lc,call,event);
+  cleanup_dead_vtable_refs(lc);
+}
+/* 4Com END */
+
 void linphone_core_notify_network_reachable(LinphoneCore *lc, bool_t reachable) {
 	L_GET_PRIVATE_FROM_C_OBJECT(lc)->notifyNetworkReachable(!!lc->sip_network_reachable, !!lc->media_network_reachable);
 	NOTIFY_IF_EXIST(network_reachable, lc,reachable);

@@ -39,6 +39,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * @{
 **/
 
+/* 4Com Start - 4Sight */
+
+/**
+ * Callback for being notified of received CtiEvent.
+ * @param call #LinphoneCall object
+ * @param event The event
+ */
+typedef void (*LinphoneCoreCbsCtiEventReceivedCb)(LinphoneCore *lc, LinphoneCall *call, LinphoneCtiEvent event);
+
+/* 4Com END */
+
 /**
  * Callback notifying that a new #LinphoneCall (either incoming or outgoing) has been created.
  * @param[in] lc #LinphoneCore object that has created the call

@@ -562,6 +562,15 @@ LINPHONE_PUBLIC LinphoneStatus linphone_call_transfer (LinphoneCall *call, const
 **/
 LINPHONE_PUBLIC LinphoneStatus linphone_call_transfer_to_another (LinphoneCall *call, LinphoneCall *dest);
 
+ /* 4Com - 4Sight */
+
+/**
+ * @return TRUE if call invite had empty body, which may indicate call was initiated by 4Sight.
+**/
+LINPHONE_PUBLIC bool_t linphone_call_invite_had_empty_body(LinphoneCall *call);
+
+/* 4Com END */
+
 /**
  * @}
  */

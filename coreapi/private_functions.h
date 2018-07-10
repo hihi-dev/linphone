@@ -517,6 +517,9 @@ void linphone_core_notify_file_transfer_send(LinphoneCore *lc, LinphoneChatMessa
 void linphone_core_notify_file_transfer_progress_indication(LinphoneCore *lc, LinphoneChatMessage *message, const LinphoneContent* content, size_t offset, size_t total);
 void linphone_core_notify_is_composing_received(LinphoneCore *lc, LinphoneChatRoom *room);
 void linphone_core_notify_dtmf_received(LinphoneCore* lc, LinphoneCall *call, int dtmf);
+
+void linphone_core_notify_cti_event_received(LinphoneCore* lc,LinphoneCall* call, LinphoneCtiEvent event); /* 4com */
+
 /*
  * return true if at least a registered vtable has a cb for dtmf received*/
 bool_t linphone_core_dtmf_received_has_listener(const LinphoneCore* lc);
