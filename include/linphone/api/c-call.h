@@ -562,7 +562,40 @@ LINPHONE_PUBLIC LinphoneStatus linphone_call_transfer (LinphoneCall *call, const
 **/
 LINPHONE_PUBLIC LinphoneStatus linphone_call_transfer_to_another (LinphoneCall *call, LinphoneCall *dest);
 
- /* 4Com - 4Sight */
+/* 4Com */
+
+/* Audio Switching */
+
+/**
+ * Change the audio input device (handset, built-in mic, headset etc).
+ * @param[in] lc LinphoneCore object
+ * @param[in] device_id The wanted audio device
+**/
+LINPHONE_PUBLIC void linphone_call_set_audio_input_device(LinphoneCall *call, int deviceId);
+
+/**
+ * Get the audio input device.
+ * @param[in] lc LinphoneCore object
+ * @return the audio device id
+**/
+LINPHONE_PUBLIC int linphone_call_get_audio_input_device(LinphoneCall *call);
+
+/**
+ * Change the audio output device (handset, speaker, headset etc).
+ * @param[in] lc LinphoneCore object
+ * @param[in] device_id The wanted audio device
+**/
+LINPHONE_PUBLIC void linphone_call_set_audio_output_device(LinphoneCall *call, int deviceId);
+
+/**
+ * Get the audio output device.
+ * @param[in] lc LinphoneCore object
+ * @return the audio output device id
+**/
+LINPHONE_PUBLIC int linphone_call_get_audio_output_device(LinphoneCall *call);
+
+
+/* 4Sight */
 
 /**
  * @return TRUE if call invite had empty body, which may indicate call was initiated by 4Sight.
