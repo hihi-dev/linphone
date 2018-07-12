@@ -600,7 +600,7 @@ LINPHONE_PUBLIC int linphone_call_get_audio_output_device(LinphoneCall *call);
 /**
  * @return TRUE if call invite had empty body, which may indicate call was initiated by 4Sight.
 **/
-LINPHONE_PUBLIC bool_t linphone_call_invite_had_empty_body(LinphoneCall *call);
+LINPHONE_PUBLIC bool_t linphone_call_invite_had_empty_body(const LinphoneCall *call);
 
 /* 4Com END */
 
