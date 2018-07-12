@@ -127,7 +127,14 @@ public:
 	void setParams (const MediaSessionParams *msp);
 	void setSpeakerVolumeGain (float value);
 
-	bool callInviteHadEmptyBody () const; /* 4Com - 4Sight */
+    /* 4Com Start */
+	bool callInviteHadEmptyBody () const;       // 4Sight
+
+    void setAudioInputDevice(int deviceId);     // Audio switching
+    int getAudioInputDevice();                  // Audio switching
+    void setAudioOutputDevice(int deviceId);    // Audio switching
+    int getAudioOutputDevice();                 // Audio switching
+    /* 4Com END */
 
 protected:
 	Call (CallPrivate &p, std::shared_ptr<Core> core);

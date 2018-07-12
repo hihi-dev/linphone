@@ -721,7 +721,9 @@ int Call::getDuration () const {
 	return d->getActiveSession()->getDuration();
 }
 
-/* 4Com - 4Sight */
+/* 4Com Start */
+
+/* 4Sight */
 /**
  * Returns true if the INVITE that initiated the call had an empty body. This is a disgusting hack, but is the only
  * known way to identify an auto-answer call from 4Sight.
@@ -730,6 +732,28 @@ bool Call::callInviteHadEmptyBody() const {
     L_D();
     return d->getActiveSession()->getPrivate()->getOp()->getcallInviteHadEmptyBody();
 }
+
+/* Audio Switching */
+void Call::setAudioInputDevice(int deviceId) {
+    L_D();
+    static_pointer_cast<MediaSession>(d->getActiveSession())->setAudioInputDevice(deviceId);
+}
+
+int Call::getAudioInputDevice() {
+    L_D();
+    return static_pointer_cast<MediaSession>(d->getActiveSession())->getAudioOutputDevice();
+}
+
+void Call::setAudioOutputDevice(int deviceId) {
+    L_D();
+    static_pointer_cast<MediaSession>(d->getActiveSession())->setAudioOutputDevice(deviceId);
+}
+
+int Call::getAudioOutputDevice() {
+    L_D();
+    return static_pointer_cast<MediaSession>(d->getActiveSession())->getAudioOutputDevice();
+}
+
 /* 4Com END */
 
 const LinphoneErrorInfo *Call::getErrorInfo () const {
