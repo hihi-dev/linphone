@@ -4847,11 +4847,12 @@ void MediaSession::setAudioInputDevice(int deviceId) {
 int MediaSession::getAudioInputDevice() {
     L_D();
     AudioStream *stream = d->audioStream;
-    if(stream)
+    if(stream) {
         return stream->audio_input_device_id;
-    else
+    } else {
         lError() << "Could not get audio input device: no audio stream";
         return -1;
+    }
 }
 
 //Audio Switching
@@ -4868,11 +4869,12 @@ void MediaSession::setAudioOutputDevice(int deviceId){
 int MediaSession::getAudioOutputDevice() {
     L_D();
     AudioStream *stream = d->audioStream;
-    if(stream)
+    if(stream) {
         return stream->audio_output_device_id;
-    else
+    } else {
         lError() << "Could not get audio output device: no audio stream";
         return -1;
+    }
 }
 /* 4Com END */
 

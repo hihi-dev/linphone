@@ -576,7 +576,7 @@ LINPHONE_PUBLIC void linphone_call_set_audio_input_device(LinphoneCall *call, in
 /**
  * Get the audio input device.
  * @param[in] lc LinphoneCore object
- * @return the audio device id
+ * @return the audio input device id, or '-1' if no audio stream
 **/
 LINPHONE_PUBLIC int linphone_call_get_audio_input_device(LinphoneCall *call);
 
@@ -590,7 +590,7 @@ LINPHONE_PUBLIC void linphone_call_set_audio_output_device(LinphoneCall *call, i
 /**
  * Get the audio output device.
  * @param[in] lc LinphoneCore object
- * @return the audio output device id
+ * @return the audio output device id, or '-1' if no audio stream
 **/
 LINPHONE_PUBLIC int linphone_call_get_audio_output_device(LinphoneCall *call);
 
