@@ -735,10 +735,12 @@ char* linphone_proxy_config_normalize_phone_number(LinphoneProxyConfig *proxy, c
 		if (dialplan.getCountryCallingCode().c_str()[0]!='\0') {
 			/* the number already starts with + or international prefix*/
 			/*0. keep at most national number significant digits */
-			char* nationnal_significant_number_start = nationnal_significant_number
-														+ MAX(0, (int)strlen(nationnal_significant_number)
-														- (int)dialplan.getNationalNumberLength());
-			ms_debug("Prefix not present. Keeping at most %d digits: %s", dialplan.getNationalNumberLength(), nationnal_significant_number_start);
+			char* nationnal_significant_number_start = nationnal_significant_number;
+														// TODO - HiHi - We are bypassing the national number length check for now due to numerous bugs
+														// + MAX(0, (int)strlen(nationnal_significant_number));
+														// - (int)dialplan.getNationalNumberLength());
+
+            ms_debug("Prefix not present.");
 
 			/*1. First prepend international calling prefix or +*/
 			/*2. Second add prefix*/
