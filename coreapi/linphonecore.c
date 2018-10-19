@@ -1274,6 +1274,8 @@ static void sound_config_read(LinphoneCore *lc)
 	}
 
 	lc->sound_conf.latency=0;
+	lc->sound_conf.input_device_id=0;
+	lc->sound_conf.output_device_id=0;
 #if !TARGET_OS_IPHONE
 	tmp=TRUE;
 #else
@@ -5732,7 +5734,7 @@ static MSFilter *get_audio_resource(LinphoneCore *lc, LinphoneAudioResourceType 
 		if (ringcard == NULL)
 			return NULL;
 
-		ringstream=lc->ringstream=ring_start(lc->factory, NULL,0,ringcard);
+		ringstream=lc->ringstream=ring_start(lc->factory, NULL,0,ringcard,0);
 		ms_filter_call_method(lc->ringstream->gendtmf,MS_DTMF_GEN_SET_DEFAULT_AMPLITUDE,&amp);
 		lc->dmfs_playing_start_time = (time_t)ms_get_cur_time_ms()/1000;
 	}else{
@@ -7488,4 +7490,42 @@ const char *linphone_core_get_linphone_specs (const LinphoneCore *core) {
 void linphone_core_set_linphone_specs (LinphoneCore *core, const char *specs) {
 	lp_config_set_string(linphone_core_get_config(core), "sip", "linphone_specs", specs);
 	core->sal->setContactLinphoneSpecs(L_C_TO_STRING(specs));
+}
+
+void linphone_core_set_audio_input_device(LinphoneCore *lc, int device_id) {
+	LinphoneCall *call=linphone_core_get_current_call (lc);
+	AudioStream *stream;
+
+	lc->sound_conf.input_device_id = device_id;
+
+	if (!call || !(stream = reinterpret_cast<AudioStream *>(linphone_call_get_stream(call, LinphoneStreamTypeAudio)))) {
+		ms_message("linphone_core_set_audio_input_device(): no active call.");
+		return;
+	}
+	audio_stream_set_audio_input_device(stream, device_id);
+}
+
+int linphone_core_get_audio_input_device(LinphoneCore *lc) {
+	return lc->sound_conf.input_device_id;
+}
+
+void linphone_core_set_audio_output_device(LinphoneCore *lc, int device_id) {
+	LinphoneCall *call=linphone_core_get_current_call (lc);
+	AudioStream *stream;
+
+	lc->sound_conf.output_device_id = device_id;
+
+	if (!call || !(stream = reinterpret_cast<AudioStream *>(linphone_call_get_stream(call, LinphoneStreamTypeAudio)))) {
+		ms_message("linphone_core_set_audio_output_device(): no active call.");
+		return;
+	}
+
+	if (lc->ringstream)
+		ring_set_audio_output_device(lc->ringstream, device_id);
+	else
+		audio_stream_set_audio_output_device(stream, device_id);
+}
+
+int linphone_core_get_audio_output_device(LinphoneCore *lc) {
+	return lc->sound_conf.output_device_id;
 }

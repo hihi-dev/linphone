@@ -2570,4 +2570,24 @@ public interface LinphoneCore {
 	  * @return the LinphoneCallLog created and stored 
 	  */
 	public LinphoneCallLog createCallLog(LinphoneAddress from, LinphoneAddress to, CallDirection dir, int duration, long start, long connected, LinphoneCallLog.CallStatus status, boolean videoEnabled, float quality);
+
+	/**
+	 * Get the audio input device.
+	 */
+	public int getAudioInputDevice();
+
+	/**
+	 * Change the audio input device (handset, built-in mic, headset etc).
+	 */
+	public void setAudioInputDevice(int deviceId);
+
+	/**
+	 * Get the audio output device.
+	 */
+	public int getAudioOutputDevice();
+
+	/**
+	 * Change the audio output device (handset, speaker, headset etc).
+	 */
+	public void setAudioOutputDevice(int deviceId);
 }

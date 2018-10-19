@@ -1841,4 +1841,28 @@ class LinphoneCoreImpl implements LinphoneCore {
 		LinphoneCallLog log = new LinphoneCallLogImpl(logPtr);
 		return log;
 	}
+
+	private native void getAudioInputDevice(long ptr);
+	@Override
+	public synchronized int getAudioInputDevice() {
+		return getAudioInputDevice(nativePtr);
+	}
+
+	private native void setAudioInputDevice(long ptr, int deviceId);
+	@Override
+	public void setAudioInputDevice(int deviceId) {
+		setAudioInputDevice(nativePtr, deviceId);
+	}
+
+	private native void getAudioOutputDevice(long ptr);
+	@Override
+	public synchronized int getAudioOutputDevice() {
+		return getAudioOutputDevice(nativePtr);
+	}
+
+	private native void setAudioOutputDevice(long ptr, int deviceId);
+	@Override
+	public void setAudioOutputDevice(int deviceId) {
+		setAudioOutputDevice(nativePtr, deviceId);
+	}
 }

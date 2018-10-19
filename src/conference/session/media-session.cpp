@@ -2750,6 +2750,10 @@ void MediaSessionPrivate::startAudioStream (CallSession::State targetState, bool
 					io.input.file = nullptr; /* We prefer to use the remote_play api, that allows to play multimedia files */
 				}
 			}
+			int audio_input_device = linphone_core_get_audio_input_device(q->getCore()->getCCore());
+			audio_stream_set_audio_input_device(audioStream, audio_input_device);
+			int audio_output_device = linphone_core_get_audio_output_device(q->getCore()->getCCore());
+			audio_stream_set_audio_output_device(audioStream, audio_output_device);
 			if (ok) {
 				int err = audio_stream_start_from_io(audioStream, audioProfile, rtpAddr, stream->rtp_port,
 					(stream->rtcp_addr[0] != '\0') ? stream->rtcp_addr : resultDesc->addr,

@@ -131,6 +131,34 @@ LINPHONE_PUBLIC LinphoneMagicSearch *linphone_core_create_magic_search(LinphoneC
 LINPHONE_PUBLIC void linphone_core_check_for_update(LinphoneCore *lc, const char *current_version);
 
 /**
+ * Change the audio input device (handset, built-in mic, headset etc).
+ * @param[in] lc LinphoneCore object
+ * @param[in] device_id The wanted audio device
+**/
+LINPHONE_PUBLIC void linphone_core_set_audio_input_device(LinphoneCore *lc, int deviceId);
+
+/**
+ * Get the audio input device.
+ * @param[in] lc LinphoneCore object
+ * @return the audio input device id, or '-1' if no audio stream
+**/
+LINPHONE_PUBLIC int linphone_core_get_audio_input_device(LinphoneCore *lc);
+
+/**
+ * Change the audio output device (handset, speaker, headset etc).
+ * @param[in] lc LinphoneCore object
+ * @param[in] device_id The wanted audio device
+**/
+LINPHONE_PUBLIC void linphone_core_set_audio_output_device(LinphoneCore *lc, int deviceId);
+
+/**
+ * Get the audio output device.
+ * @param[in] lc LinphoneCore object
+ * @return the audio output device id, or '-1' if no audio stream
+**/
+LINPHONE_PUBLIC int linphone_core_get_audio_output_device(LinphoneCore *lc);
+
+/**
  * @}
  */
 
@@ -5602,7 +5630,6 @@ LINPHONE_PUBLIC LinphoneAccountCreator * linphone_core_create_account_creator(Li
  * @ingroup misc
 **/
 LINPHONE_PUBLIC LinphoneXmlRpcSession * linphone_core_create_xml_rpc_session(LinphoneCore *lc, const char *url);
-
 
 #ifdef __cplusplus
 }

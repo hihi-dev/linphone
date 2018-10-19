@@ -97,7 +97,7 @@ LinphoneStatus linphone_ringtoneplayer_start_with_cb(MSFactory *factory, Linphon
 		ms_message("Starting local ringtone...");
 		rp->end_of_ringtone = end_of_ringtone;
 		rp->end_of_ringtone_ud = user_data;
-		rp->ringstream=ring_start_with_cb(factory, ringtone,loop_pause_ms,card,notify_end_of_ringtone,rp);
+		rp->ringstream=ring_start_with_cb(factory, ringtone,loop_pause_ms,card,0,notify_end_of_ringtone,rp);
 		return rp->ringstream != NULL ? 0 : 1;
 	}
 	return 3;
