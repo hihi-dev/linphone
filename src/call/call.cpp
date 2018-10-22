@@ -733,27 +733,6 @@ bool Call::callInviteHadEmptyBody() const {
     return d->getActiveSession()->getPrivate()->getOp()->getcallInviteHadEmptyBody();
 }
 
-/* Audio Switching */
-void Call::setAudioInputDevice(int deviceId) {
-    L_D();
-    static_pointer_cast<MediaSession>(d->getActiveSession())->setAudioInputDevice(deviceId);
-}
-
-int Call::getAudioInputDevice() {
-    L_D();
-    return static_pointer_cast<MediaSession>(d->getActiveSession())->getAudioOutputDevice();
-}
-
-void Call::setAudioOutputDevice(int deviceId) {
-    L_D();
-    static_pointer_cast<MediaSession>(d->getActiveSession())->setAudioOutputDevice(deviceId);
-}
-
-int Call::getAudioOutputDevice() {
-    L_D();
-    return static_pointer_cast<MediaSession>(d->getActiveSession())->getAudioOutputDevice();
-}
-
 /* 4Com END */
 
 const LinphoneErrorInfo *Call::getErrorInfo () const {

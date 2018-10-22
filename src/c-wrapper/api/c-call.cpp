@@ -573,28 +573,6 @@ bool_t linphone_call_media_in_progress (const LinphoneCall *call) {
 	return L_GET_CPP_PTR_FROM_C_OBJECT(call)->mediaInProgress();
 }
 
-/* 4Com */
-
-/* Audio Switching */
-void linphone_call_set_audio_input_device(LinphoneCall *call, int deviceId) {
-    L_GET_CPP_PTR_FROM_C_OBJECT(call)->setAudioInputDevice(deviceId);
-}
-
-/* Audio Switching */
-int linphone_call_get_audio_input_device(LinphoneCall *call) {
-    return L_GET_CPP_PTR_FROM_C_OBJECT(call)->getAudioInputDevice();
-}
-
-/* Audio Switching */
-void linphone_call_set_audio_output_device(LinphoneCall *call, int deviceId) {
-    L_GET_CPP_PTR_FROM_C_OBJECT(call)->setAudioOutputDevice(deviceId);
-}
-
-/* Audio Switching */
-int linphone_call_get_audio_output_device(LinphoneCall *call) {
-    return L_GET_CPP_PTR_FROM_C_OBJECT(call)->getAudioOutputDevice();
-}
-
 /* 4Sight */
 bool_t linphone_call_invite_had_empty_body(const LinphoneCall *call) {
     return L_GET_CPP_PTR_FROM_C_OBJECT(call)->callInviteHadEmptyBody();
