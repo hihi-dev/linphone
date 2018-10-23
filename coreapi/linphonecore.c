@@ -5734,7 +5734,6 @@ static MSFilter *get_audio_resource(LinphoneCore *lc, LinphoneAudioResourceType 
 		if (ringcard == NULL)
 			return NULL;
 
-		ms_message("HJP get_audio_resource");
 		ringstream=lc->ringstream=ring_start(lc->factory, NULL,0,ringcard,0);
 		ms_filter_call_method(lc->ringstream->gendtmf,MS_DTMF_GEN_SET_DEFAULT_AMPLITUDE,&amp);
 		lc->dmfs_playing_start_time = (time_t)ms_get_cur_time_ms()/1000;
