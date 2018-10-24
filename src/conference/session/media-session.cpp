@@ -2750,6 +2750,10 @@ void MediaSessionPrivate::startAudioStream (CallSession::State targetState, bool
 					io.input.file = nullptr; /* We prefer to use the remote_play api, that allows to play multimedia files */
 				}
 			}
+			int audio_input_device = linphone_core_get_audio_input_device(q->getCore()->getCCore());
+			audio_stream_set_audio_input_device(audioStream, audio_input_device);
+			int audio_output_device = linphone_core_get_audio_output_device(q->getCore()->getCCore());
+			audio_stream_set_audio_output_device(audioStream, audio_output_device);
 			if (ok) {
 				int err = audio_stream_start_from_io(audioStream, audioProfile, rtpAddr, stream->rtp_port,
 					(stream->rtcp_addr[0] != '\0') ? stream->rtcp_addr : resultDesc->addr,
@@ -4830,52 +4834,5 @@ void MediaSession::setSpeakerVolumeGain (float value) {
 	else
 		lError() << "Could not set playback volume: no audio stream";
 }
-
-/* 4Com Start */
-
-//Audio Switching
-void MediaSession::setAudioInputDevice(int deviceId) {
-    L_D();
-    AudioStream *stream = d->audioStream;
-    if(stream)
-        audio_stream_set_audio_input_device(stream, deviceId);
-    else
-        lError() << "Could not set audio input device: no audio stream";
-}
-
-//Audio Switching
-int MediaSession::getAudioInputDevice() {
-    L_D();
-    AudioStream *stream = d->audioStream;
-    if(stream) {
-        return stream->audio_input_device_id;
-    } else {
-        lError() << "Could not get audio input device: no audio stream";
-        return -1;
-    }
-}
-
-//Audio Switching
-void MediaSession::setAudioOutputDevice(int deviceId){
-    L_D();
-    AudioStream *stream = d->audioStream;
-    if(stream)
-        audio_stream_set_audio_output_device(stream, deviceId);
-    else
-        lError() << "Could not set audio output device: no audio stream";
-}
-
-//Audio Switching
-int MediaSession::getAudioOutputDevice() {
-    L_D();
-    AudioStream *stream = d->audioStream;
-    if(stream) {
-        return stream->audio_output_device_id;
-    } else {
-        lError() << "Could not get audio output device: no audio stream";
-        return -1;
-    }
-}
-/* 4Com END */
 
 LINPHONE_END_NAMESPACE

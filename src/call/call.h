@@ -129,11 +129,6 @@ public:
 
     /* 4Com Start */
 	bool callInviteHadEmptyBody () const;       // 4Sight
-
-    void setAudioInputDevice(int deviceId);     // Audio switching
-    int getAudioInputDevice();                  // Audio switching
-    void setAudioOutputDevice(int deviceId);    // Audio switching
-    int getAudioOutputDevice();                 // Audio switching
     /* 4Com END */
 
 protected:

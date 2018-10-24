@@ -8908,3 +8908,19 @@ extern "C" jlong Java_org_linphone_core_LinphoneCoreImpl_createCallLog(JNIEnv *e
 	LinphoneCallLog *log = linphone_core_create_call_log(core, from, to, dir, duration, start, connected, status, video_enabled, quality);
 	return (jlong) log;
 }
+
+extern "C" jint Java_org_linphone_core_LinphoneCoreImpl_getAudioInputDevice(JNIEnv *env, jobject thiz, jlong lc) {
+	return linphone_core_get_audio_input_device((LinphoneCore*)lc);
+}
+
+extern "C" void Java_org_linphone_core_LinphoneCoreImpl_setAudioInputDevice(JNIEnv *env, jobject thiz, jlong lc, jint deviceId) {
+	linphone_core_set_audio_input_device((LinphoneCore*)lc, deviceId);
+}
+
+extern "C" jint Java_org_linphone_core_LinphoneCoreImpl_getAudioOutputDevice(JNIEnv *env, jobject thiz, jlong lc) {
+	return linphone_core_get_audio_output_device((LinphoneCore*)lc);
+}
+
+extern "C" void Java_org_linphone_core_LinphoneCoreImpl_setAudioOutputDevice(JNIEnv *env, jobject thiz, jlong lc, jint deviceId) {
+	linphone_core_set_audio_output_device((LinphoneCore*)lc, deviceId);
+}

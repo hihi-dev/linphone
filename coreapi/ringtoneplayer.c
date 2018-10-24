@@ -25,8 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "TargetConditionals.h"
 #endif
 
-LinphoneStatus linphone_ringtoneplayer_start(MSFactory *factory, LinphoneRingtonePlayer* rp, MSSndCard* card, const char* ringtone, int loop_pause_ms) {
-	return linphone_ringtoneplayer_start_with_cb(factory, rp, card, ringtone, loop_pause_ms, NULL, NULL);
+LinphoneStatus linphone_ringtoneplayer_start(MSFactory *factory, LinphoneRingtonePlayer* rp, MSSndCard* card, int device_id, const char* ringtone, int loop_pause_ms) {
+	return linphone_ringtoneplayer_start_with_cb(factory, rp, card, device_id, ringtone, loop_pause_ms, NULL, NULL);
 }
 
 #if TARGET_OS_IPHONE
@@ -88,7 +88,7 @@ static void notify_end_of_ringtone(void *ud, MSFilter *f, unsigned int event, vo
 	}
 }
 
-LinphoneStatus linphone_ringtoneplayer_start_with_cb(MSFactory *factory, LinphoneRingtonePlayer* rp, MSSndCard* card, const char* ringtone, int loop_pause_ms, LinphoneRingtonePlayerFunc end_of_ringtone, void * user_data) {
+LinphoneStatus linphone_ringtoneplayer_start_with_cb(MSFactory *factory, LinphoneRingtonePlayer* rp, MSSndCard* card, int device_id, const char* ringtone, int loop_pause_ms, LinphoneRingtonePlayerFunc end_of_ringtone, void * user_data) {
 	if (linphone_ringtoneplayer_is_started(rp)) {
 		ms_message("the local ringtone is already started");
 		return 2;
@@ -97,7 +97,7 @@ LinphoneStatus linphone_ringtoneplayer_start_with_cb(MSFactory *factory, Linphon
 		ms_message("Starting local ringtone...");
 		rp->end_of_ringtone = end_of_ringtone;
 		rp->end_of_ringtone_ud = user_data;
-		rp->ringstream=ring_start_with_cb(factory, ringtone,loop_pause_ms,card,notify_end_of_ringtone,rp);
+		rp->ringstream=ring_start_with_cb(factory, ringtone,loop_pause_ms,card,device_id,notify_end_of_ringtone,rp);
 		return rp->ringstream != NULL ? 0 : 1;
 	}
 	return 3;

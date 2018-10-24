@@ -307,6 +307,8 @@ struct sound_config
 	bool_t ec;
 	bool_t ea;
 	bool_t agc;
+	int input_device_id;
+	int output_device_id;
 };
 
 struct codecs_config

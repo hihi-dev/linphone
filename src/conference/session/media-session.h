@@ -105,13 +105,6 @@ public:
 	void setParams (const MediaSessionParams *msp);
 	void setSpeakerVolumeGain (float value);
 
-	/* 4Com Start */
-	void setAudioInputDevice(int deviceId);
-	int getAudioInputDevice();
-	void setAudioOutputDevice(int deviceId);
-	int getAudioOutputDevice();
-	/* 4Com END */
-
 private:
 	L_DECLARE_PRIVATE(MediaSession);
 	L_DISABLE_COPY(MediaSession);

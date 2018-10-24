@@ -165,7 +165,7 @@ void CallPrivate::startRemoteRing () {
 		audio_stream_unprepare_sound(as);
 	if (lc->sound_conf.remote_ring) {
 		ms_snd_card_set_stream_type(ringCard, MS_SND_CARD_STREAM_VOICE);
-		lc->ringstream = ring_start(lc->factory, lc->sound_conf.remote_ring, 2000, ringCard);
+		lc->ringstream = ring_start(lc->factory, lc->sound_conf.remote_ring, 2000, ringCard, lc->sound_conf.output_device_id);
 	}
 }
 
@@ -731,27 +731,6 @@ int Call::getDuration () const {
 bool Call::callInviteHadEmptyBody() const {
     L_D();
     return d->getActiveSession()->getPrivate()->getOp()->getcallInviteHadEmptyBody();
-}
-
-/* Audio Switching */
-void Call::setAudioInputDevice(int deviceId) {
-    L_D();
-    static_pointer_cast<MediaSession>(d->getActiveSession())->setAudioInputDevice(deviceId);
-}
-
-int Call::getAudioInputDevice() {
-    L_D();
-    return static_pointer_cast<MediaSession>(d->getActiveSession())->getAudioOutputDevice();
-}
-
-void Call::setAudioOutputDevice(int deviceId) {
-    L_D();
-    static_pointer_cast<MediaSession>(d->getActiveSession())->setAudioOutputDevice(deviceId);
-}
-
-int Call::getAudioOutputDevice() {
-    L_D();
-    return static_pointer_cast<MediaSession>(d->getActiveSession())->getAudioOutputDevice();
 }
 
 /* 4Com END */
