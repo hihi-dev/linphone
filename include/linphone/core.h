@@ -1031,6 +1031,14 @@ LINPHONE_DEPRECATED LINPHONE_PUBLIC LinphoneCore *linphone_core_new_with_config(
 LINPHONE_PUBLIC void linphone_core_start (LinphoneCore *core);
 
 /**
+ * Indicates whether the linphone core has been started.
+ * @ingroup initializing
+ * @param[in] lc #LinphoneCore object
+ * @return A boolean indicating whether the core has been started or not
+ */
+LINPHONE_PUBLIC bool_t linphone_core_is_started (LinphoneCore *lc);
+
+/**
  * Increment the reference counter of a #LinphoneCore object.
  * @param lc The #LinphoneCore which the ref counter is to be incremented.
  * @return A pointer on the #LinphoneCore passed as parameter.

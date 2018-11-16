@@ -8924,3 +8924,7 @@ extern "C" jint Java_org_linphone_core_LinphoneCoreImpl_getAudioOutputDevice(JNI
 extern "C" void Java_org_linphone_core_LinphoneCoreImpl_setAudioOutputDevice(JNIEnv *env, jobject thiz, jlong lc, jint deviceId) {
 	linphone_core_set_audio_output_device((LinphoneCore*)lc, deviceId);
 }
+
+extern "C" jboolean Java_org_linphone_core_LinphoneCoreImpl_isStarted(JNIEnv *env, jobject thiz, jlong lc) {
+	return (jboolean) linphone_core_is_started((LinphoneCore*)lc);
+}
