@@ -2398,6 +2398,9 @@ static void linphone_core_init(LinphoneCore * lc, LinphoneCoreCbs *cbs, LpConfig
 void linphone_core_start (LinphoneCore *lc) {
 	linphone_core_set_state(lc,LinphoneGlobalStartup,"Starting up");
 
+	// 4Com - create transport sockets on start rather than initialisation (see HiHi-706)
+	_linphone_core_apply_transports(lc);
+
 	//to give a chance to change uuid before starting
 	const char* uuid=lp_config_get_string(lc->config,"misc","uuid",NULL);
 	if (!uuid){
@@ -2421,6 +2424,10 @@ void linphone_core_start (LinphoneCore *lc) {
 	} else {
 		linphone_configuring_terminated(lc, LinphoneConfiguringSkipped, NULL);
 	}
+}
+
+bool_t linphone_core_is_started(LinphoneCore *lc) {
+	return linphone_core_get_global_state(lc) == LinphoneGlobalOn;
 }
 
 LinphoneCore *_linphone_core_new_with_config(LinphoneCoreCbs *cbs, struct _LpConfig *config, void *userdata, void *system_context, bool_t automatically_start) {
@@ -3110,7 +3117,7 @@ LinphoneStatus linphone_core_set_sip_transports(LinphoneCore *lc, const Linphone
 		lp_config_set_int(lc->config,"sip","sip_tls_port",tr_config->tls_port);
 	}
 
-	if (lc->sal==NULL) return 0;
+	if (lc->sal==NULL || !linphone_core_ready(lc)) return 0;
 	return _linphone_core_apply_transports(lc);
 }
 
