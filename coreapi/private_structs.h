@@ -307,6 +307,7 @@ struct sound_config
 	bool_t ec;
 	bool_t ea;
 	bool_t agc;
+	bool_t earlyinstream;
 	int input_device_id;
 	int output_device_id;
 };
@@ -738,6 +739,7 @@ namespace LinphonePrivate {
 	MSList *friends_lists; \
 	MSList *auth_info; \
 	struct _RingStream *ringstream; \
+	struct _EarlyInStream *earlyinstream; \
 	time_t dmfs_playing_start_time; \
 	LCCallbackObj preview_finished_cb; \
 	MSList *queued_calls; \

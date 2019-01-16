@@ -3210,6 +3210,22 @@ LINPHONE_PUBLIC void linphone_core_enable_echo_limiter(LinphoneCore *lc, bool_t 
 **/
 LINPHONE_PUBLIC bool_t linphone_core_echo_limiter_enabled(const LinphoneCore *lc);
 
+/**
+ * Enables or disable early input stream.
+ * @param[in] lc #LinphoneCore object.
+ * @param[in] val TRUE to enable early input stream, FALSE to disable it.
+ * @ingroup media_parameters
+**/
+LINPHONE_PUBLIC void linphone_core_enable_early_in_stream(LinphoneCore *lc, bool_t val);
+
+/**
+ * Tells whether early input stream is enabled.
+ * @param[in] lc #LinphoneCore object.
+ * @return TRUE if early input stream is enabled, FALSE otherwise.
+ * @ingroup media_parameters
+**/
+LINPHONE_PUBLIC bool_t linphone_core_early_in_stream_enabled(const LinphoneCore *lc);
+
 void linphone_core_enable_agc(LinphoneCore *lc, bool_t val);
 
 bool_t linphone_core_agc_enabled(const LinphoneCore *lc);

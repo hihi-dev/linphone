@@ -1292,6 +1292,8 @@ static void sound_config_read(LinphoneCore *lc)
 
 	linphone_core_set_remote_ringback_tone (lc,lp_config_get_string(lc->config,"sound","ringback_tone",NULL));
 
+	linphone_core_enable_early_in_stream (lc, !!lp_config_get_int(lc->config,"sound","early_in_stream",NULL));
+
 	/*just parse requested stream feature once at start to print out eventual errors*/
 	linphone_core_get_audio_features(lc);
 
@@ -3748,12 +3750,16 @@ void linphone_core_notify_incoming_call(LinphoneCore *lc, LinphoneCall *call){
 	/* Play the ring if this is the only call*/
 	if (linphone_core_get_calls_nb(lc)==1){
 		MSSndCard *ringcard=lc->sound_conf.lsd_card ?lc->sound_conf.lsd_card : lc->sound_conf.ring_sndcard;
-		L_GET_PRIVATE_FROM_C_OBJECT(lc)->setCurrentCall(L_GET_CPP_PTR_FROM_C_OBJECT(call));
-		if (lc->ringstream && lc->dmfs_playing_start_time!=0){
-			linphone_core_stop_dtmf_stream(lc);
+		if(lc->sound_conf.earlyinstream){
+			lc->earlyinstream=earlyinstream_start(lc->factory, ringcard, lc->sound_conf.output_device_id);
+		} else {
+			L_GET_PRIVATE_FROM_C_OBJECT(lc)->setCurrentCall(L_GET_CPP_PTR_FROM_C_OBJECT(call));
+			if (lc->ringstream && lc->dmfs_playing_start_time!=0){
+				linphone_core_stop_dtmf_stream(lc);
+			}
+			ms_snd_card_set_stream_type(ringcard, MS_SND_CARD_STREAM_RING);
+			linphone_ringtoneplayer_start(lc->factory, lc->ringtoneplayer, ringcard, lc->sound_conf.output_device_id, lc->sound_conf.local_ring, 2000);
 		}
-		ms_snd_card_set_stream_type(ringcard, MS_SND_CARD_STREAM_RING);
-		linphone_ringtoneplayer_start(lc->factory, lc->ringtoneplayer, ringcard, lc->sound_conf.output_device_id, lc->sound_conf.local_ring, 2000);
 	}else{
 		/* else play a tone within the context of the current call */
 		L_GET_PRIVATE_FROM_C_OBJECT(call)->setRingingBeep(true);
@@ -3871,7 +3877,7 @@ int linphone_core_preempt_sound_resources(LinphoneCore *lc){
 		ms_message("Pausing automatically the current call.");
 		err = L_GET_CPP_PTR_FROM_C_OBJECT(current_call)->pause();
 	}
-	if (lc->ringstream){
+	if (lc->ringstream || lc->earlyinstream){
 		linphone_core_stop_ringing(lc);
 	}
 	return err;
@@ -4496,6 +4502,14 @@ void linphone_core_enable_echo_limiter(LinphoneCore *lc, bool_t val){
 
 bool_t linphone_core_echo_limiter_enabled(const LinphoneCore *lc){
 	return lc->sound_conf.ea;
+}
+
+void linphone_core_enable_early_in_stream(LinphoneCore *lc, bool_t val){
+	lc->sound_conf.earlyinstream=val;
+}
+
+bool_t linphone_core_early_in_stream_enabled(const LinphoneCore *lc){
+	return lc->sound_conf.earlyinstream;
 }
 
 static void linphone_core_mute_audio_stream(LinphoneCore *lc, AudioStream *st, bool_t val) {
@@ -6244,6 +6258,9 @@ void _linphone_core_uninit(LinphoneCore *lc)
 	if (lc->ringtoneplayer) {
 		linphone_ringtoneplayer_destroy(lc->ringtoneplayer);
 	}
+	if (lc->earlyinstream) {
+		earlyinstream_stop(lc->earlyinstream);
+	}
 	if (lc->im_encryption_engine) {
 		linphone_im_encryption_engine_unref(lc->im_encryption_engine);
 	}
@@ -6520,6 +6537,10 @@ void linphone_core_stop_ringing(LinphoneCore* lc) {
 		lc->ringstream=NULL;
 		lc->dmfs_playing_start_time=0;
 		lc->ringstream_autorelease=TRUE;
+	}
+	if (lc->earlyinstream) {
+		earlyinstream_stop(lc->earlyinstream);
+		lc->earlyinstream=NULL;
 	}
 	if (call && L_GET_PRIVATE_FROM_C_OBJECT(call)->getRingingBeep()) {
 		linphone_core_stop_dtmf(lc);
