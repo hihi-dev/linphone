@@ -165,7 +165,7 @@ void CallPrivate::startRemoteRing () {
 		audio_stream_unprepare_sound(as);
 	if (lc->sound_conf.remote_ring) {
 		ms_snd_card_set_stream_type(ringCard, MS_SND_CARD_STREAM_VOICE);
-		lc->ringstream = ring_start(lc->factory, lc->sound_conf.remote_ring, 2000, ringCard, lc->sound_conf.output_device_id);
+		lc->ringstream = ring_start(lc->factory, lc->sound_conf.remote_ring, 2000, ringCard, lc->sound_conf.output_device_id, lc->sound_conf.input_device_id);
 	}
 }
 
