@@ -3758,7 +3758,7 @@ void linphone_core_notify_incoming_call(LinphoneCore *lc, LinphoneCall *call){
 				linphone_core_stop_dtmf_stream(lc);
 			}
 			ms_snd_card_set_stream_type(ringcard, MS_SND_CARD_STREAM_RING);
-			linphone_ringtoneplayer_start(lc->factory, lc->ringtoneplayer, ringcard, lc->sound_conf.output_device_id, lc->sound_conf.local_ring, 2000);
+			linphone_ringtoneplayer_start(lc->factory, lc->ringtoneplayer, ringcard, lc->sound_conf.output_device_id, lc->sound_conf.input_device_id, lc->sound_conf.local_ring, 2000);
 		}
 	}else{
 		/* else play a tone within the context of the current call */
@@ -4464,7 +4464,7 @@ LinphoneStatus linphone_core_preview_ring(LinphoneCore *lc, const char *ring,Lin
 	}
 	lc_callback_obj_init(&lc->preview_finished_cb,end_of_ringtone,userdata);
 	lc->preview_finished=0;
-	err = linphone_ringtoneplayer_start_with_cb(lc->factory, lc->ringtoneplayer, ringcard, lc->sound_conf.output_device_id, ring, -1, notify_end_of_ringtone,(void *)lc);
+	err = linphone_ringtoneplayer_start_with_cb(lc->factory, lc->ringtoneplayer, ringcard, lc->sound_conf.output_device_id, lc->sound_conf.input_device_id, ring, -1, notify_end_of_ringtone,(void *)lc);
 	if (err) {
 		lc->preview_finished=1;
 	}
@@ -5755,7 +5755,7 @@ static MSFilter *get_audio_resource(LinphoneCore *lc, LinphoneAudioResourceType 
 		if (ringcard == NULL)
 			return NULL;
 
-		ringstream=lc->ringstream=ring_start(lc->factory, NULL,0,ringcard,0);
+		ringstream=lc->ringstream=ring_start(lc->factory, NULL,0,ringcard,0,0);
 		ms_filter_call_method(lc->ringstream->gendtmf,MS_DTMF_GEN_SET_DEFAULT_AMPLITUDE,&amp);
 		lc->dmfs_playing_start_time = (time_t)ms_get_cur_time_ms()/1000;
 	}else{
