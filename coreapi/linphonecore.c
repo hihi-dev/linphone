@@ -3763,7 +3763,7 @@ void linphone_core_notify_incoming_call(LinphoneCore *lc, LinphoneCall *call){
 	}else{
 		/* else play a tone within the context of the current call */
 		L_GET_PRIVATE_FROM_C_OBJECT(call)->setRingingBeep(true);
-		linphone_core_play_named_tone(lc,LinphoneToneCallWaiting);
+		//linphone_core_play_named_tone(lc,LinphoneToneCallWaiting);
 	}
 }
 
