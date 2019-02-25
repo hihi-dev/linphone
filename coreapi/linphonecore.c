@@ -146,6 +146,8 @@ static void set_media_network_reachable(LinphoneCore* lc,bool_t isReachable);
 static void linphone_core_run_hooks(LinphoneCore *lc);
 static void linphone_core_zrtp_cache_close(LinphoneCore *lc);
 void linphone_core_zrtp_cache_db_init(LinphoneCore *lc, const char *fileName);
+/*4Com waiting boolean */
+static bool_t waiting_beeps_enabled = FALSE;
 
 #include "enum.h"
 #include "contact_providers_priv.h"
@@ -3746,6 +3748,11 @@ bool_t linphone_core_incompatible_security(LinphoneCore *lc, SalMediaDescription
 	return linphone_core_is_media_encryption_mandatory(lc) && linphone_core_get_media_encryption(lc)==LinphoneMediaEncryptionSRTP && !sal_media_description_has_srtp(md);
 }
 
+/* 4Com Call waiting tone */
+void linphone_core_enable_call_waiting_tones(LinphoneCore *lc, bool_t enabled){
+	waiting_beeps_enabled = enabled;
+}
+
 void linphone_core_notify_incoming_call(LinphoneCore *lc, LinphoneCall *call){
 	/* Play the ring if this is the only call*/
 	if (linphone_core_get_calls_nb(lc)==1){
@@ -3760,10 +3767,10 @@ void linphone_core_notify_incoming_call(LinphoneCore *lc, LinphoneCall *call){
 			ms_snd_card_set_stream_type(ringcard, MS_SND_CARD_STREAM_RING);
 			linphone_ringtoneplayer_start(lc->factory, lc->ringtoneplayer, ringcard, lc->sound_conf.output_device_id, lc->sound_conf.input_device_id, lc->sound_conf.local_ring, 2000);
 		}
-	}else{
+	}else if (waiting_beeps_enabled){
 		/* else play a tone within the context of the current call */
 		L_GET_PRIVATE_FROM_C_OBJECT(call)->setRingingBeep(true);
-		//linphone_core_play_named_tone(lc,LinphoneToneCallWaiting);
+		linphone_core_play_named_tone(lc,LinphoneToneCallWaiting);
 	}
 }
 
