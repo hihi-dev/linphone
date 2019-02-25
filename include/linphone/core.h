@@ -151,6 +151,14 @@ LINPHONE_PUBLIC int linphone_core_get_audio_input_device(LinphoneCore *lc);
 **/
 LINPHONE_PUBLIC void linphone_core_set_audio_output_device(LinphoneCore *lc, int deviceId);
 
+
+/** 
+ * 4com, enable call waiting tones.
+ * @param[in] lc LinphoneCore object
+ * @param[in] enabled Whether to enable call waiting beeps
+**/
+LINPHONE_PUBLIC void linphone_core_enable_call_waiting_tones(LinphoneCore *lc, bool_t enabled);
+
 /**
  * Get the audio output device.
  * @param[in] lc LinphoneCore object
