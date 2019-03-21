@@ -149,7 +149,7 @@ static void call_received(SalCallOp *h) {
 	/** 4Com Ghost fix **/
 	const char* redirection_to = sal_address_get_domain(h->getRemoteContactAddress());
     if (get_proxy_match_count(lc, redirection_to) == 0) {
-        ms_warning("BALLSACK: Receiving a call from an unknown proxy: %s", redirection_to);
+        ms_warning("Receiving a call from an unknown proxy: %s", redirection_to);
         h->decline(SalReasonNotAcceptable, nullptr);
 		h->release();
         return;
