@@ -2136,6 +2136,8 @@ LINPHONE_PUBLIC void linphone_core_remove_proxy_config(LinphoneCore *lc, Linphon
 **/
 LINPHONE_PUBLIC const bctbx_list_t *linphone_core_get_proxy_config_list(const LinphoneCore *lc);
 
+LINPHONE_PUBLIC int get_proxy_match_count(LinphoneCore *lc, const char* domain); // 4COM Ghost call fix
+
 /** @deprecated Use linphone_core_set_default_proxy_config() instead. */
 #define linphone_core_set_default_proxy(lc, config) linphone_core_set_default_proxy_config(lc, config)
 

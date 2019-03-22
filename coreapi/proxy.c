@@ -1106,6 +1106,27 @@ void linphone_core_clear_proxy_config(LinphoneCore *lc){
 	linphone_proxy_config_write_all_to_config_file(lc);
 }
 
+int get_proxy_match_count(LinphoneCore* lc, const char* domain) { /** 4COM Ghost Call fix **/
+    MSList* proxy;
+    int proxy_matches = 0;
+
+    for (proxy=(MSList*)linphone_core_get_proxy_config_list(lc);proxy!=NULL;proxy=proxy->next) {
+        LinphoneProxyConfig* pp = (LinphoneProxyConfig*)(proxy->data);
+
+        char *ip = pp->reg_proxy;
+        char* ptr = strchr(ip, ':');
+
+        if (ptr != NULL) {
+            ip = pp->reg_proxy + (ptr-ip+1);
+        }
+
+        if (strcmp(domain, ip) == 0) {
+            proxy_matches++;
+        }
+    }
+    return proxy_matches;
+}
+
 int linphone_core_get_default_proxy_config_index(LinphoneCore *lc) {
 	int pos = -1;
 	if (lc->default_proxy != NULL) {

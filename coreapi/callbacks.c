@@ -146,6 +146,15 @@ static void call_received(SalCallOp *h) {
 		// TODO: handle media conference joining if the "text" feature tag is not present
 	}
 
+	/** 4Com Ghost fix **/
+	const char* redirection_to = sal_address_get_domain(h->getRemoteContactAddress());
+    if (get_proxy_match_count(lc, redirection_to) == 0) {
+        ms_warning("Receiving a call from an unknown proxy: %s", redirection_to);
+        h->decline(SalReasonNotAcceptable, nullptr);
+		h->release();
+        return;
+    }
+	
 	/* First check if we can answer successfully to this invite */
 	LinphonePresenceActivity *activity = nullptr;
 	if ((linphone_presence_model_get_basic_status(lc->presence_model) == LinphonePresenceBasicStatusClosed)
