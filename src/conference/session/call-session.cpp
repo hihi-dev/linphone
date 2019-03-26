@@ -306,7 +306,9 @@ bool CallSessionPrivate::failure () {
 		// Notify referer of the failure
 		notifyReferState();
 	}
-	return false;
+
+	// 4Com - Return true so busy beeps are heard (HS-59)
+	return true;
 }
 
 void CallSessionPrivate::infoReceived (SalBodyHandler *bodyHandler) {
