@@ -1112,15 +1112,9 @@ int get_proxy_match_count(LinphoneCore* lc, const char* domain) { /** 4COM Ghost
 
     for (proxy=(MSList*)linphone_core_get_proxy_config_list(lc);proxy!=NULL;proxy=proxy->next) {
         LinphoneProxyConfig* pp = (LinphoneProxyConfig*)(proxy->data);
-
         char *ip = pp->reg_proxy;
-        char* ptr = strchr(ip, ':');
 
-        if (ptr != NULL) {
-            ip = pp->reg_proxy + (ptr-ip+1);
-        }
-
-        if (strcmp(domain, ip) == 0) {
+        if (strstr(ip, domain) != NULL) {
             proxy_matches++;
         }
     }
