@@ -3406,7 +3406,7 @@ int MediaSessionPrivate::mediaParametersChanged (SalMediaDescription *oldMd, Sal
 		lInfo() << "Local description has changed: " << differences;
 		ms_free(differences);
 	}
-	int otherDescChanged = sal_media_description_equals(oldMd, newMd);
+	int otherDescChanged = sal_media_description_relaxed_equals(oldMd, newMd);
 	if (otherDescChanged) {
 		char *differences = sal_media_description_print_differences(otherDescChanged);
 		lInfo() << "Other description has changed: " << differences;
