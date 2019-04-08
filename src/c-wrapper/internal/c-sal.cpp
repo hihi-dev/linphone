@@ -390,7 +390,37 @@ static bool_t payload_list_equals(const bctbx_list_t *l1, const bctbx_list_t *l2
 	return TRUE;
 }
 
-int sal_stream_description_equals(const SalStreamDescription *sd1, const SalStreamDescription *sd2) {
+/*
+ * 4Com relax payload checking (HS-277)
+ *
+ * Same behaviour as payload_list_equals except payloads are still considered
+ * equal if only their ordering is different
+ *
+ * Returns true if contents of payloads match irrespective of their order
+ */
+static bool_t payload_list_relaxed_equals(bctbx_list_t *l1, bctbx_list_t *l2){
+	if (bctbx_list_size(l1) != bctbx_list_size(l2)) return FALSE;
+	bctbx_list_t *e1,*e2;
+	bool_t match = TRUE;
+	for(e1=l1;e1!=NULL && match == TRUE; e1=e1->next){
+		PayloadType *p1=(PayloadType*)e1->data;
+		match = FALSE;
+		if (!is_recv_only(p1)) {
+            for(e2=l2;e2!=NULL;e2=e2->next){
+                PayloadType *p2=(PayloadType*)e2->data;
+                if (payload_type_equals(p1,p2)) {
+                    match = TRUE;
+                    break;
+                }
+            }
+        } else {
+            ms_message("Skipping recv-only payload type...");
+        }
+	}
+	return match;
+}
+
+static int stream_description_equals(const SalStreamDescription *sd1, const SalStreamDescription *sd2, bool_t relaxed) {
 	int result = SAL_MEDIA_DESCRIPTION_UNCHANGED;
 	int i;
 
@@ -417,9 +447,13 @@ int sal_stream_description_equals(const SalStreamDescription *sd1, const SalStre
 	}
 	if (strcmp(sd1->rtcp_addr, sd2->rtcp_addr) != 0) result |= SAL_MEDIA_DESCRIPTION_NETWORK_CHANGED;
 	if (sd1->rtcp_port != sd2->rtcp_port) result |= SAL_MEDIA_DESCRIPTION_NETWORK_CHANGED;
-	if (!payload_list_equals(sd1->payloads, sd2->payloads)) result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
+
+    if (relaxed) {
+        if (!payload_list_relaxed_equals(sd1->payloads, sd2->payloads)) result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
+    } else if (!payload_list_equals(sd1->payloads, sd2->payloads)) result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
+
 	if (sd1->bandwidth != sd2->bandwidth) result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
-	if (sd1->ptime != sd2->ptime) result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
+	if (sd1->ptime != -1 && sd2->ptime != -1 && sd1->ptime != sd2->ptime) result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
 	if (sd1->dir != sd2->dir) result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
 
 	/* ICE */
@@ -432,6 +466,10 @@ int sal_stream_description_equals(const SalStreamDescription *sd1, const SalStre
 	if (strcmp(sd1->dtls_fingerprint, sd2->dtls_fingerprint) != 0) result |= SAL_MEDIA_DESCRIPTION_CRYPTO_KEYS_CHANGED;
 
 	return result;
+}
+
+int sal_stream_description_equals(const SalStreamDescription *sd1, const SalStreamDescription *sd2) {
+    return stream_description_equals(sd1, sd2, FALSE);
 }
 
 char * sal_media_description_print_differences(int result){
@@ -475,7 +513,7 @@ char * sal_media_description_print_differences(int result){
 	return out;
 }
 
-int sal_media_description_equals(const SalMediaDescription *md1, const SalMediaDescription *md2) {
+static int media_description_equals(const SalMediaDescription *md1, const SalMediaDescription *md2, bool_t relaxed) {
 	int result = SAL_MEDIA_DESCRIPTION_UNCHANGED;
 	int i;
 
@@ -483,7 +521,7 @@ int sal_media_description_equals(const SalMediaDescription *md1, const SalMediaD
 	if (md1->addr[0]!='\0' && md2->addr[0]!='\0' && ms_is_multicast(md1->addr) != ms_is_multicast(md2->addr))
 		result |= SAL_MEDIA_DESCRIPTION_NETWORK_XXXCAST_CHANGED;
 	if (md1->nb_streams != md2->nb_streams) result |= SAL_MEDIA_DESCRIPTION_STREAMS_CHANGED;
-	if (md1->bandwidth != md2->bandwidth) result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
+	if ((!relaxed || md2->bandwidth != 0) && md1->bandwidth != md2->bandwidth) result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
 
 	/* ICE */
 	if (strcmp(md1->ice_ufrag, md2->ice_ufrag) != 0 && md2->ice_ufrag[0] != '\0') result |= SAL_MEDIA_DESCRIPTION_ICE_RESTART_DETECTED;
@@ -491,9 +529,27 @@ int sal_media_description_equals(const SalMediaDescription *md1, const SalMediaD
 
 	for(i = 0; i < SAL_MEDIA_DESCRIPTION_MAX_STREAMS; ++i){
 		if (!sal_stream_description_active(&md1->streams[i]) && !sal_stream_description_active(&md2->streams[i])) continue;
-		result |= sal_stream_description_equals(&md1->streams[i], &md2->streams[i]);
+		result |= stream_description_equals(&md1->streams[i], &md2->streams[i], relaxed);
 	}
 	return result;
+}
+
+int sal_media_description_equals(const SalMediaDescription *md1, const SalMediaDescription *md2) {
+    return media_description_equals(md1, md2, FALSE);
+}
+
+/*
+ * 4Com relaxed media description checking (HS-277)
+ *
+ * Same as media_description_equals except:-
+ *
+ * - A new bandwidth of 0 (don't care) is considered equal to the existing bandwidth
+ * - Stream payloads (eg, G711, G729 etc) are still considered equal if only their ordering is different
+ * - If either ptime is -1 (ie, not set) they are considered equal
+ *
+ */
+int sal_media_description_relaxed_equals(const SalMediaDescription *md1, const SalMediaDescription *md2) {
+    return media_description_equals(md1, md2, TRUE);
 }
 
 #if 0
