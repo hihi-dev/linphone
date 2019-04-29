@@ -3758,7 +3758,7 @@ void linphone_core_notify_incoming_call(LinphoneCore *lc, LinphoneCall *call){
 	if (linphone_core_get_calls_nb(lc)==1){
 		MSSndCard *ringcard=lc->sound_conf.lsd_card ?lc->sound_conf.lsd_card : lc->sound_conf.ring_sndcard;
 		if(lc->sound_conf.earlyinstream){
-			lc->earlyinstream=earlyinstream_start(lc->factory, ringcard, lc->sound_conf.output_device_id);
+			lc->earlyinstream=earlyinstream_start(lc->factory, ringcard, lc->sound_conf.input_device_id);
 		} else {
 			L_GET_PRIVATE_FROM_C_OBJECT(lc)->setCurrentCall(L_GET_CPP_PTR_FROM_C_OBJECT(call));
 			if (lc->ringstream && lc->dmfs_playing_start_time!=0){
