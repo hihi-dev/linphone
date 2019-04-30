@@ -7537,7 +7537,11 @@ void linphone_core_set_audio_input_device(LinphoneCore *lc, int device_id) {
 		ms_message("linphone_core_set_audio_input_device(): no active call.");
 		return;
 	}
-	audio_stream_set_audio_input_device(stream, device_id);
+
+	if (lc->ringstream)
+		ring_set_audio_input_device(lc->ringstream, device_id);
+	else
+		audio_stream_set_audio_input_device(stream, device_id);
 }
 
 int linphone_core_get_audio_input_device(LinphoneCore *lc) {
