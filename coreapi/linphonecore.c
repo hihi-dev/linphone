@@ -148,6 +148,8 @@ static void linphone_core_zrtp_cache_close(LinphoneCore *lc);
 void linphone_core_zrtp_cache_db_init(LinphoneCore *lc, const char *fileName);
 /*4Com waiting boolean */
 static bool_t waiting_beeps_enabled = FALSE;
+/*4Com hold boolean */
+static bool_t hold_beeps_enabled = FALSE;
 
 #include "enum.h"
 #include "contact_providers_priv.h"
@@ -3754,6 +3756,11 @@ void linphone_core_enable_call_waiting_tones(LinphoneCore *lc, bool_t enabled){
 	waiting_beeps_enabled = enabled;
 }
 
+/* 4Com Call on hold tone */
+void linphone_core_enable_call_on_hold_tones(LinphoneCore *lc, bool_t enabled){
+	hold_beeps_enabled = enabled;
+}
+
 void linphone_core_notify_incoming_call(LinphoneCore *lc, LinphoneCall *call){
 	/* Play the ring if this is the only call*/
 	if (linphone_core_get_calls_nb(lc)==1){
@@ -5826,6 +5833,11 @@ void linphone_core_play_named_tone(LinphoneCore *lc, LinphoneToneID toneid){
 			/*these are french tones, excepted the failed one, which is USA congestion tone (does not exist in France)*/
 			switch(toneid){
 				case LinphoneToneCallOnHold:
+				    def.duration=300;
+                    def.frequencies[0]=440;
+                    def.interval=2000;
+                    def.repeat_count=2;
+				break;
 				case LinphoneToneCallWaiting:
 					def.duration=300;
 					def.frequencies[0]=440;
