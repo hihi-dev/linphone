@@ -5833,11 +5833,11 @@ void linphone_core_play_named_tone(LinphoneCore *lc, LinphoneToneID toneid){
 			/*these are french tones, excepted the failed one, which is USA congestion tone (does not exist in France)*/
 			switch(toneid){
 				case LinphoneToneCallOnHold:
-				if(hold_beeps_enabled){
-				    def.duration=300;
-                    def.frequencies[0]=440;
-                    def.interval=2000;
-                    def.repeat_count=2;
+				    if (hold_beeps_enabled) {
+				        def.duration=300;
+                        def.frequencies[0]=440;
+                        def.interval=2000;
+                        def.repeat_count=2;
                     }
 				break;
 				case LinphoneToneCallWaiting:
