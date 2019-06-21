@@ -159,7 +159,7 @@ LINPHONE_PUBLIC void linphone_core_set_audio_output_device(LinphoneCore *lc, int
 **/
 LINPHONE_PUBLIC void linphone_core_enable_call_waiting_tones(LinphoneCore *lc, bool_t enabled);
 
-**
+/**
  * 4com, enable call on hold tones.
  * @param[in] lc LinphoneCore object
  * @param[in] enabled Whether to enable call waiting beeps
