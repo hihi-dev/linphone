@@ -404,8 +404,8 @@ static bool_t payload_list_relaxed_equals(bctbx_list_t *l1, bctbx_list_t *l2){
 	bool_t match = TRUE;
 	for(e1=l1;e1!=NULL && match == TRUE; e1=e1->next){
 		PayloadType *p1=(PayloadType*)e1->data;
-		match = FALSE;
 		if (!is_recv_only(p1)) {
+			match = FALSE;
             for(e2=l2;e2!=NULL;e2=e2->next){
                 PayloadType *p2=(PayloadType*)e2->data;
                 if (payload_type_equals(p1,p2)) {
