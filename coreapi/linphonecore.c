@@ -1297,6 +1297,7 @@ static void sound_config_read(LinphoneCore *lc)
 	linphone_core_set_remote_ringback_tone (lc,lp_config_get_string(lc->config,"sound","ringback_tone",NULL));
 
 	linphone_core_enable_early_in_stream (lc, !!lp_config_get_int(lc->config,"sound","early_in_stream",NULL));
+	linphone_core_enable_test_tone(lc, !!lp_config_get_int(lc->config,"sound","test_tone",0));
 
 	/*just parse requested stream feature once at start to print out eventual errors*/
 	linphone_core_get_audio_features(lc);
@@ -4510,6 +4511,16 @@ void linphone_core_enable_echo_cancellation(LinphoneCore *lc, bool_t val){
 bool_t linphone_core_echo_cancellation_enabled(const LinphoneCore *lc){
 	return lc->sound_conf.ec;
 }
+
+// 4Com start
+void linphone_core_enable_test_tone(LinphoneCore *lc, bool_t val){
+	lc->sound_conf.test_tone=val;
+}
+
+bool_t linphone_core_test_tone_enabled(const LinphoneCore *lc){
+	return lc->sound_conf.test_tone;
+}
+// 4Com end
 
 void linphone_core_enable_echo_limiter(LinphoneCore *lc, bool_t val){
 	lc->sound_conf.ea=val;
