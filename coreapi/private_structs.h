@@ -308,6 +308,7 @@ struct sound_config
 	bool_t ea;
 	bool_t agc;
 	bool_t earlyinstream;
+	bool_t test_tone;
 	int input_device_id;
 	int output_device_id;
 };

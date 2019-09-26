@@ -2760,6 +2760,8 @@ void MediaSessionPrivate::startAudioStream (CallSession::State targetState, bool
 			audio_stream_set_audio_input_device(audioStream, audio_input_device);
 			int audio_output_device = linphone_core_get_audio_output_device(q->getCore()->getCCore());
 			audio_stream_set_audio_output_device(audioStream, audio_output_device);
+			bool_t useTestTone = linphone_core_test_tone_enabled(q->getCore()->getCCore());
+			audio_stream_enable_test_tone(audioStream, useTestTone);
 			if (ok) {
 				int err = audio_stream_start_from_io(audioStream, audioProfile, rtpAddr, stream->rtp_port,
 					(stream->rtcp_addr[0] != '\0') ? stream->rtcp_addr : resultDesc->addr,
