@@ -3889,6 +3889,9 @@ int linphone_core_preempt_sound_resources(LinphoneCore *lc){
 
 	current_call=linphone_core_get_current_call(lc);
 	if(current_call != NULL){
+		// Allow new call if the current call is incoming received ("ignore" has been clicked)
+		if (L_GET_CPP_PTR_FROM_C_OBJECT(current_call)->getState() == CallSession::State::IncomingReceived) return 0;
+
 		ms_message("Pausing automatically the current call.");
 		err = L_GET_CPP_PTR_FROM_C_OBJECT(current_call)->pause();
 	}
