@@ -1210,10 +1210,13 @@ void MediaSessionPrivate::getLocalIp (const Address &remoteAddr) {
 			freeaddrinfo(res);
 	}
 
-	if (!dest.empty() || mediaLocalIp.empty() || needMediaLocalIpRefresh) {
-		needMediaLocalIpRefresh = false;
-		mediaLocalIp.reserve(LINPHONE_IPADDR_SIZE);
-		linphone_core_get_local_ip(q->getCore()->getCCore(), af, dest.c_str(), &mediaLocalIp[0]);
+	if (mediaLocalIp.empty() || needLocalIpRefresh) {
+		if (dest.empty()) dest = "87.98.157.38"; // A public IP address, as already used in port.c & proxy_config.h
+
+		char tmp[LINPHONE_IPADDR_SIZE];
+		linphone_core_get_local_ip(q->getCore()->getCCore(), af, dest.c_str(), tmp);
+		mediaLocalIp.assign(tmp);
+		needLocalIpRefresh = false;
 	}
 }
 
