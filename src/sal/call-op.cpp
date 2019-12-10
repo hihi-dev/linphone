@@ -27,6 +27,11 @@
 #include "content/content-disposition.h"
 #include "content/content-type.h"
 
+#include <stdio.h>
+#include <string.h>
+
+#define REFER_PREFIX "refer"
+
 using namespace std;
 
 LINPHONE_BEGIN_NAMESPACE
@@ -549,6 +554,26 @@ void SalCallOp::processTransactionTerminatedCb(void *user_ctx, const belle_sip_t
 	}
 	if (resp) code = belle_sip_response_get_status_code(resp);
 
+	/** 4Com Call transfer response **/
+	belle_sip_header_cseq_t *cseq;
+	belle_sip_header_t *call_header;
+	const char *header_value;
+
+	cseq = belle_sip_message_get_header_by_type(req, belle_sip_header_cseq_t);
+
+	if (strncasecmp(belle_sip_header_cseq_get_method(cseq), REFER_PREFIX, strlen(REFER_PREFIX)) == 0) {
+		if (code >= 300) {
+			// We have recieved a termination call-back for a REFER event
+			call_header = belle_sip_message_get_header(BELLE_SIP_MESSAGE(req), BELLE_SIP_CALL_ID);
+			header_value = belle_sip_header_get_unparsed_value(call_header);
+
+			// Propagate refer failure to the notify-refer call-back
+			SalReferStatus status = SalReferFailed;
+			op->mRoot->mCallbacks.notify_refer(op, status);
+		}
+	}
+	/** 4Com **/
+
 	if (op->mState == State::Terminating
 			&& strcmp("BYE",belle_sip_request_get_method(req))==0
 			&& (!resp || (belle_sip_response_get_status_code(resp) != 401
@@ -839,8 +864,8 @@ void SalCallOp::processRequestEventCb(void *op_base, const belle_sip_request_eve
             belle_sip_header_t* call_event=belle_sip_message_get_header(BELLE_SIP_MESSAGE(req),"Event");
             const char* header_value=belle_sip_header_get_unparsed_value(call_event);
 
-            if(strcmp(header_value,"refer")==0) {
-                op->processNotify(event,server_transaction);
+			if (strncmp(header_value, REFER_PREFIX, strlen(REFER_PREFIX)) == 0) {
+				op->processNotify(event,server_transaction);
             } else if(strcmp(header_value,"hold")==0) {
                 op->handleCtiNotify(op, server_transaction, req, "hold");
             } else if(strcmp(header_value,"talk")==0) {
