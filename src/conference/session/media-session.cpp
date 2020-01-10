@@ -360,7 +360,7 @@ void MediaSessionPrivate::telephoneEventReceived (int event) {
 }
 
 void MediaSessionPrivate::terminated () {
-	stopStreams();
+	stopStreamsImmediately();
 	CallSessionPrivate::terminated();
 }
 
@@ -595,6 +595,13 @@ void MediaSessionPrivate::initializeStreams () {
 	initializeAudioStream();
 	initializeVideoStream();
 	initializeTextStream();
+}
+
+// 4Com - disable stream lingering before stopping them
+void MediaSessionPrivate::stopStreamsImmediately () {
+	if (audioStream)
+		audio_stream_set_lingering(audioStream, false);
+	stopStreams();
 }
 
 void MediaSessionPrivate::stopStreams () {
@@ -3663,8 +3670,7 @@ void MediaSessionPrivate::terminate () {
 	L_Q();
 	if (listener)
 		listener->onStopRingingIfNeeded(q->getSharedFromThis());
-
-	stopStreams();
+	stopStreamsImmediately();
 	CallSessionPrivate::terminate();
 }
 

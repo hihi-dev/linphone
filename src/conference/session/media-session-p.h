@@ -93,6 +93,7 @@ public:
 	void setAudioMuted (bool value) { audioMuted = value; }
 
 	void initializeStreams ();
+	void stopStreamsImmediately ();
 	void stopStreams ();
 
 	// Methods used by testers
