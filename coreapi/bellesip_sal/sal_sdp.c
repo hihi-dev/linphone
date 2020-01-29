@@ -376,7 +376,16 @@ static void stream_description_to_sdp ( belle_sdp_session_description_t *session
 		belle_sip_list_t *l = belle_sdp_session_description_get_attributes(custom_desc);
 		belle_sip_list_t *elem;
 		for (elem = l; elem != NULL; elem = elem->next) {
-			belle_sdp_media_description_add_attribute(media_desc, (belle_sdp_attribute_t *)elem->data);
+			// 4COM [HS-981] 'Video freezes when call transferred across enterprises'
+			//
+			// Call Recording enabled causes additional media-direction values to be added to SDP media attributes as a
+			// 'key-value' pair when remote pauses the stream. This is causing problems with video, Stop adding it.
+			if (strncmp(belle_sdp_attribute_get_name((belle_sdp_attribute_t *)elem->data), "sendonly", 8) != 0 &&
+				strncmp(belle_sdp_attribute_get_name((belle_sdp_attribute_t *)elem->data), "inactive", 8) != 0 &&
+				strncmp(belle_sdp_attribute_get_name((belle_sdp_attribute_t *)elem->data), "recvonly", 8) != 0 &&
+				strncmp(belle_sdp_attribute_get_name((belle_sdp_attribute_t *)elem->data), "sendrecv", 8) != 0) {
+				belle_sdp_media_description_add_attribute(media_desc, (belle_sdp_attribute_t *)elem->data);
+			}
 		}
 	}
 
