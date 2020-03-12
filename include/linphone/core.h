@@ -3249,6 +3249,22 @@ LINPHONE_PUBLIC void linphone_core_enable_echo_limiter(LinphoneCore *lc, bool_t 
 LINPHONE_PUBLIC bool_t linphone_core_echo_limiter_enabled(const LinphoneCore *lc);
 
 /**
+ * Enables or disables opening port until after linphone_core_start() is called.
+ * @param[in] lc #LinphoneCore object.
+ * @param[in] val TRUE to delay opening port, FALSE to disable it.
+ * @ingroup media_parameters
+ **/
+LINPHONE_PUBLIC void linphone_core_enable_delayed_port(LinphoneCore *lc, bool_t val);
+
+/**
+ * Returns whether delayed port is enabled.
+ * @param[in] lc #LinphoneCore object.
+ * @return TRUE if delayed port is enabled, FALSE if not.
+ * @ingroup media_parameters
+ **/
+LINPHONE_PUBLIC bool_t linphone_core_delayed_port_enabled(LinphoneCore *lc);
+
+/**
  * Enables or disable early input stream.
  * @param[in] lc #LinphoneCore object.
  * @param[in] val TRUE to enable early input stream, FALSE to disable it.

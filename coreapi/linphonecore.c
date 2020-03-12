@@ -1469,6 +1469,8 @@ static void sip_config_read(LinphoneCore *lc) {
 	lc->sip_conf.keepalive_period = (unsigned int)lp_config_get_int(lc->config,"sip","keepalive_period",10000);
 	lc->sip_conf.tcp_tls_keepalive = !!lp_config_get_int(lc->config,"sip","tcp_tls_keepalive",0);
 	linphone_core_enable_keep_alive(lc, (lc->sip_conf.keepalive_period > 0));
+	lc->sip_conf.delayedport = !!lp_config_get_int(lc->config, "sip", "enable_delayed_port", 0);
+	linphone_core_enable_delayed_port(lc, (lc->sip_conf.delayedport > 0));
 	lc->sal->useOneMatchingCodecPolicy(!!lp_config_get_int(lc->config,"sip","only_one_codec",0));
 	lc->sal->useDates(!!lp_config_get_int(lc->config,"sip","put_date",0));
 	lc->sal->enableSipUpdateMethod(!!lp_config_get_int(lc->config,"sip","sip_update",1));
@@ -2407,7 +2409,7 @@ void linphone_core_start (LinphoneCore *lc) {
 	linphone_core_set_state(lc,LinphoneGlobalStartup,"Starting up");
 
 	// 4Com - create transport sockets on start rather than initialisation (see HiHi-706)
-	_linphone_core_apply_transports(lc);
+	if (linphone_core_delayed_port_enabled(lc)) _linphone_core_apply_transports(lc);
 
 	//to give a chance to change uuid before starting
 	const char* uuid=lp_config_get_string(lc->config,"misc","uuid",NULL);
@@ -3125,7 +3127,8 @@ LinphoneStatus linphone_core_set_sip_transports(LinphoneCore *lc, const Linphone
 		lp_config_set_int(lc->config,"sip","sip_tls_port",tr_config->tls_port);
 	}
 
-	if (lc->sal==NULL || !linphone_core_ready(lc)) return 0;
+	if (lc->sal == NULL || (linphone_core_delayed_port_enabled(lc) && !linphone_core_ready(lc)))
+		return 0;
 	return _linphone_core_apply_transports(lc);
 }
 
@@ -6556,6 +6559,14 @@ void linphone_core_enable_keep_alive(LinphoneCore* lc,bool_t enable) {
 
 bool_t linphone_core_keep_alive_enabled(LinphoneCore* lc) {
 	return lc->sal->getKeepAlivePeriod() > 0;
+}
+
+void linphone_core_enable_delayed_port(LinphoneCore *lc, bool_t val) {
+	lc->sip_conf.delayedport = val;
+}
+
+bool_t linphone_core_delayed_port_enabled(LinphoneCore *lc) {
+	return lc->sip_conf.delayedport;
 }
 
 void linphone_core_start_dtmf_stream(LinphoneCore* lc) {

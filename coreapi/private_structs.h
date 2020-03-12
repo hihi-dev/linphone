@@ -246,6 +246,7 @@ struct sip_config
 	bool_t tcp_tls_keepalive;
 	bool_t vfu_with_info; /*use to enable vfu request using sip info*/
 	bool_t save_auth_info; // if true, auth infos will be write in the config file when they are added to the list
+	bool_t delayedport;	// 4Com - Enables or disables opening port until after linphone_core_start() is called.
 };
 
 struct rtp_config
