@@ -75,7 +75,7 @@ public:
 	using OnPublishResponseCb = void (*) (SalOp *op);
 	using OnNotifyResponseCb = void (*) (SalOp *op);
 	using OnExpireCb = void (*) (SalOp *op);
-	using OnCtiEventReceivedCb = void (*) (SalOp *op, const char *event); /* 4Com - 4Sight */
+	using OnCtiEventReceivedCb = void (*)(SalOp *op, const char *event, const char *callId); /* 4Com - 4Sight */
 
 	struct Callbacks {
 		OnCallReceivedCb call_received;
