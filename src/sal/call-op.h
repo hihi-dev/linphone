@@ -91,8 +91,8 @@ private:
 	void processNotify (const belle_sip_request_event_t *event, belle_sip_server_transaction_t *serverTransaction);
 
 	/* 4Com */
-	void handleCtiNotify(SalOp *op, belle_sip_server_transaction_t *server_transaction, belle_sip_request_t *request, const char *event, const char *callId);
-	void handleCtiAnswerEvent(SalOp *op, belle_sip_header_t *call_event, const char *callId);
+	void handleCtiNotify(SalOp *op, belle_sip_server_transaction_t *server_transaction, belle_sip_request_t *request, const char *event);
+	void handleCtiAnswerEvent(SalOp *op, belle_sip_header_t *call_event);
 	/* 4Com END */
 
 	static void setAddrTo0000 (char value[], size_t sz);

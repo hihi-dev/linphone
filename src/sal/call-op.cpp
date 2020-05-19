@@ -790,7 +790,7 @@ void SalCallOp::processRequestEventCb(void *op_base, const belle_sip_request_eve
         else if (strcmp("NOTIFY",method)==0) {
                 resp=op->createResponseFromRequest(req,200);
                 belle_sip_server_transaction_send_response(server_transaction,resp);
-				op->handleCtiAnswerEvent(op, belle_sip_message_get_header(BELLE_SIP_MESSAGE(req),"Event"), op->getCallId().c_str());
+                op->handleCtiAnswerEvent(op, belle_sip_message_get_header(BELLE_SIP_MESSAGE(req),"Event"));
         }
         /* 4com end */
 		else {
@@ -867,10 +867,10 @@ void SalCallOp::processRequestEventCb(void *op_base, const belle_sip_request_eve
 			if (strncmp(header_value, REFER_PREFIX, strlen(REFER_PREFIX)) == 0) {
 				op->processNotify(event,server_transaction);
             } else if(strcmp(header_value,"hold")==0) {
-				op->handleCtiNotify(op, server_transaction, req, "hold", op->getCallId().c_str());
-			} else if(strcmp(header_value,"talk")==0) {
-				op->handleCtiNotify(op, server_transaction, req, "talk", op->getCallId().c_str());
-			} else {
+                op->handleCtiNotify(op, server_transaction, req, "hold");
+            } else if(strcmp(header_value,"talk")==0) {
+                op->handleCtiNotify(op, server_transaction, req, "talk");
+            } else {
                 op->unsupportedMethod(server_transaction,req);
             }
             /* 4com end */
@@ -1622,18 +1622,17 @@ void SalCallOp::handleOfferAnswerResponse(belle_sip_response_t* response) {
 
 /* 4com */
 
-void SalCallOp::handleCtiNotify(SalOp *op, belle_sip_server_transaction_t *server_transaction,
-								belle_sip_request_t *request, const char *event, const char *callId) {
-	belle_sip_response_t *resp;
-	this->mRoot->mCallbacks.cti_event_received(op, event, callId);
-	resp = createResponseFromRequest(request, 200);
+void SalCallOp::handleCtiNotify(SalOp *op, belle_sip_server_transaction_t *server_transaction, belle_sip_request_t *request, const char *event) {
+    belle_sip_response_t *resp;
+    this->mRoot->mCallbacks.cti_event_received(op, event);
+    resp = createResponseFromRequest(request, 200);
     belle_sip_server_transaction_send_response(server_transaction, resp);
 }
 
-void SalCallOp::handleCtiAnswerEvent(SalOp *op, belle_sip_header_t *call_event, const char *callId) {
-	if (strcmp(belle_sip_header_get_unparsed_value(call_event), "talk") == 0) {
-		this->mRoot->mCallbacks.cti_event_received(op, "answer", callId);
-	}
+void SalCallOp::handleCtiAnswerEvent(SalOp *op, belle_sip_header_t *call_event) {
+    if(strcmp(belle_sip_header_get_unparsed_value(call_event),"talk")==0) {
+        this->mRoot->mCallbacks.cti_event_received(op, "answer");
+    }
 }
 
 /* 4com - end */

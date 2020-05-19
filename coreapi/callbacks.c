@@ -765,8 +765,9 @@ static void on_notify_response(SalOp *op){
 
 /* 4Com Start */
 
-static void cti_event_received(SalOp *op, const char *event, const char *callId) {
+static void cti_event_received(SalOp *op, const char *event) {
 	LinphoneCore *lc = (LinphoneCore *)op->getSal()->getUserPointer();
+	const char *callId = op->getCallId().c_str();
 	const bctbx_list_t *elem;
 
 	for (elem = linphone_core_get_calls(lc); elem != NULL; elem = elem->next) {
