@@ -765,17 +765,24 @@ static void on_notify_response(SalOp *op){
 
 /* 4Com Start */
 
-static void cti_event_received(SalOp *op, const char* event) {
-    LinphoneCore *lc=(LinphoneCore *)op->getSal()->getUserPointer();
-    LinphoneCall *call=(LinphoneCall*)op->getUserPointer();
+static void cti_event_received(SalOp *op, const char *event) {
+	LinphoneCore *lc = (LinphoneCore *)op->getSal()->getUserPointer();
+	const char *callId = op->getCallId().c_str();
+	const bctbx_list_t *elem;
 
-    if(strcmp(event,"answer")==0) {
-        linphone_core_notify_cti_event_received(lc,call,CtiAnswer);
-    } else if(strcmp(event,"hold")==0) {
-        linphone_core_notify_cti_event_received(lc,call,CtiHold);
-    } else if(strcmp(event,"talk")==0) {
-        linphone_core_notify_cti_event_received(lc,call,CtiResume);
-    }
+	for (elem = linphone_core_get_calls(lc); elem != NULL; elem = elem->next) {
+		LinphoneCall *call = (LinphoneCall *) elem->data;
+		if ((strcmp(linphone_call_log_get_call_id(linphone_call_get_log(call)), callId) == 0)) {
+			if (strcmp(event, "answer") == 0) {
+				linphone_core_notify_cti_event_received(lc, call, CtiAnswer);
+			} else if (strcmp(event, "hold") == 0) {
+				linphone_core_notify_cti_event_received(lc, call, CtiHold);
+			} else if (strcmp(event, "talk") == 0) {
+				linphone_core_notify_cti_event_received(lc, call, CtiResume);
+			}
+			break;
+		}
+	}
 }
 
 /* 4com end */
