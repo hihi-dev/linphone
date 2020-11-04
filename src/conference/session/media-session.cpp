@@ -254,7 +254,10 @@ bool MediaSessionPrivate::failure () {
 
 	if (listener)
 		listener->onStopRingingIfNeeded(q->getSharedFromThis());
-	stopStreams();
+
+	if ((ei->reason != SalReasonNone) && listener)
+		listener->onPlayErrorTone(q->getSharedFromThis(), linphone_reason_from_sal(ei->reason));
+
 	return false;
 }
 

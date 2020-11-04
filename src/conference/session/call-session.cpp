@@ -299,16 +299,12 @@ bool CallSessionPrivate::failure () {
 			else
 				setState(CallSession::State::End, ei->full_string ? ei->full_string : "");
 		}
-		if ((ei->reason != SalReasonNone) && listener)
-			listener->onPlayErrorTone(q->getSharedFromThis(), linphone_reason_from_sal(ei->reason));
 	}
 	if (referer) {
 		// Notify referer of the failure
 		notifyReferState();
 	}
-
-	// 4Com - Return true so busy beeps are heard (HS-59)
-	return true;
+	return false;
 }
 
 void CallSessionPrivate::infoReceived (SalBodyHandler *bodyHandler) {
