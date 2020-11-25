@@ -406,16 +406,16 @@ static bool_t payload_list_relaxed_equals(bctbx_list_t *l1, bctbx_list_t *l2){
 		PayloadType *p1=(PayloadType*)e1->data;
 		if (!is_recv_only(p1)) {
 			match = FALSE;
-            for(e2=l2;e2!=NULL;e2=e2->next){
-                PayloadType *p2=(PayloadType*)e2->data;
-                if (payload_type_equals(p1,p2)) {
-                    match = TRUE;
-                    break;
-                }
-            }
-        } else {
-            ms_message("Skipping recv-only payload type...");
-        }
+			for(e2=l2;e2!=NULL;e2=e2->next){
+				PayloadType *p2=(PayloadType*)e2->data;
+				if (payload_type_equals(p1,p2)) {
+					match = TRUE;
+					break;
+                		}
+			}
+        	} else {
+			ms_message("Skipping recv-only payload type...");
+		}
 	}
 	return match;
 }
@@ -521,7 +521,8 @@ static int media_description_equals(const SalMediaDescription *md1, const SalMed
 	if (md1->addr[0]!='\0' && md2->addr[0]!='\0' && ms_is_multicast(md1->addr) != ms_is_multicast(md2->addr))
 		result |= SAL_MEDIA_DESCRIPTION_NETWORK_XXXCAST_CHANGED;
 	if (md1->nb_streams != md2->nb_streams) result |= SAL_MEDIA_DESCRIPTION_STREAMS_CHANGED;
-	if ((!relaxed || md2->bandwidth != 0) && md1->bandwidth != md2->bandwidth) result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
+	if (!(relaxed && (md1->bandwidth == 0 || md2->bandwidth == 0)) && md1->bandwidth != md2->bandwidth)
+		result |= SAL_MEDIA_DESCRIPTION_CODEC_CHANGED;
 
 	/* ICE */
 	if (strcmp(md1->ice_ufrag, md2->ice_ufrag) != 0 && md2->ice_ufrag[0] != '\0') result |= SAL_MEDIA_DESCRIPTION_ICE_RESTART_DETECTED;
@@ -543,10 +544,15 @@ int sal_media_description_equals(const SalMediaDescription *md1, const SalMediaD
  *
  * Same as media_description_equals except:-
  *
- * - A new bandwidth of 0 (don't care) is considered equal to the existing bandwidth
+ * - A new bandwidth of 0 (don't care) is considered equal to the existing bandwidth (see note)
  * - Stream payloads (eg, G711, G729 etc) are still considered equal if only their ordering is different
  * - If either ptime is -1 (ie, not set) they are considered equal
  *
+ * NOTE:
+ * 
+ * Linphone defaults bandwidth to zero if it's absent from the offerer's SDP request. This happens when call
+ * recording enters a call. This is a bit dodgy though as 0 could be set explicitly by the offerer
+ * (albeit discouraged) meaning no RTP/RTCP should be sent. See RFC 3264 Section 5.
  */
 int sal_media_description_relaxed_equals(const SalMediaDescription *md1, const SalMediaDescription *md2) {
     return media_description_equals(md1, md2, TRUE);
