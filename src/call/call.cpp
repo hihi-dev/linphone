@@ -455,8 +455,10 @@ void CallPrivate::onStopRinging (const shared_ptr<CallSession> &session) {
 void CallPrivate::onStopRingingIfInCall (const shared_ptr<CallSession> &session) {
 	L_Q();
 	LinphoneCore *lc = q->getCore()->getCCore();
-	// We stop the ring only if we have this current call or if we are in call
-	if ((q->getCore()->getCallCount() == 1) || linphone_core_in_call(lc)) {
+	// 4Com TPF-178
+	if ((q->getCore()->getCallCount() == 1)
+		|| (q->getState() == CallSession::State::OutgoingRinging)
+		|| (q->getState() == CallSession::State::OutgoingEarlyMedia)) {
 		linphone_core_stop_ringing(lc);
 	}
 }
