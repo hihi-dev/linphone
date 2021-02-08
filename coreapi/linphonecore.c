@@ -3758,6 +3758,19 @@ bool_t linphone_core_incompatible_security(LinphoneCore *lc, SalMediaDescription
 /* 4Com Call waiting tone */
 void linphone_core_enable_call_waiting_tones(LinphoneCore *lc, bool_t enabled){
 	waiting_beeps_enabled = enabled;
+	/* Apply setting to existing incoming calls */
+	for (const auto &call : L_GET_CPP_PTR_FROM_C_OBJECT(lc)->getCalls()) {
+		if (call->getState() == CallSession::State::IncomingReceived) {
+			if (enabled != (bool_t)L_GET_PRIVATE(call)->getRingingBeep()) {
+				L_GET_PRIVATE(call)->setRingingBeep(!!enabled);
+				if (enabled) {
+					linphone_core_play_named_tone(lc, LinphoneToneCallWaiting);
+				} else {
+					linphone_core_stop_dtmf(lc);
+				}
+			}
+		}
+	}
 }
 
 /* 4Com Call on hold tone */
