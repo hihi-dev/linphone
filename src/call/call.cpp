@@ -470,6 +470,7 @@ void CallPrivate::onStopRingingIfNeeded (const shared_ptr<CallSession> &session)
 	bool ringDuringEarlyMedia = !!linphone_core_get_ring_during_incoming_early_media(lc);
 	for (const auto &call : q->getCore()->getCalls()) {
 		if ((call->getState() == CallSession::State::IncomingReceived)
+			|| (call->getState() == CallSession::State::OutgoingRinging) // HS-1816
 			|| (ringDuringEarlyMedia && call->getState() == CallSession::State::IncomingEarlyMedia)) {
 			stopRinging = false;
 			break;
